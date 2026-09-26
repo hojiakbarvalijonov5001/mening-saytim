@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KODEKS — Biznesni tizimlash uchun qo'llanma | insan</title>
+<meta name="description" content="Xodimlar bilan puxta aloqa qurish uchun 400 dan ortiq xarid to'plami. Bobur Musaboev — «Kodeks» qo'llanmasi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07090f;
+    --bg-2:#0d111b;
+    --card:#111827;
+    --line:rgba(255,255,255,.08);
+    --text:#eef1f7;
+    --muted:#9aa3b5;
+    --gold:#f2c14e;
+    --gold-2:#d99a2b;
+    --cyan:#27c2dc;
+    --brown:#7a3b24;
+    --radius:22px;
+    --max:1180px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Manrope",system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+  .serif{font-family:"Playfair Display",Georgia,serif}
+  .gold{color:var(--gold)}
+  .cyan{color:var(--cyan)}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    padding:18px 34px;border-radius:14px;border:0;cursor:pointer;
+    font:700 15px/1 "Manrope",sans-serif;letter-spacing:.14em;text-transform:uppercase;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .btn-gold{
+    color:#2a1a02;
+    background:linear-gradient(135deg,#ffe08a 0%,var(--gold) 45%,var(--gold-2) 100%);
+    box-shadow:0 10px 30px -8px rgba(242,193,78,.55), inset 0 1px 0 rgba(255,255,255,.5);
+  }
+  .btn-gold:hover{transform:translateY(-3px);box-shadow:0 18px 40px -10px rgba(242,193,78,.7), inset 0 1px 0 rgba(255,255,255,.5)}
+  .btn-ghost{color:var(--text);border:1px solid var(--line);background:rgba(255,255,255,.03)}
+  .btn-ghost:hover{border-color:rgba(242,193,78,.5);color:var(--gold)}
+
+  /* ---------- Header ---------- */
+  header{
+    position:fixed;inset:0 0 auto 0;z-index:50;
+    transition:background .3s ease, border-color .3s ease, backdrop-filter .3s;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{background:rgba(7,9,15,.78);backdrop-filter:blur(14px);border-color:var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:78px;gap:20px}
+  .brand{display:flex;align-items:center;gap:16px}
+  .logo{font-weight:800;font-size:34px;letter-spacing:-.03em;line-height:1;position:relative}
+  .logo::before{content:"";position:absolute;left:1px;top:-2px;width:8px;height:8px;border-radius:50%;background:var(--cyan)}
+  .tagline{border-left:1px solid rgba(255,255,255,.35);padding-left:16px;font-size:12.5px;color:var(--muted);line-height:1.35;max-width:200px}
+  .nav-links{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  .phone{font-weight:700;font-size:17px;white-space:nowrap}
+  .phone:hover{color:var(--gold)}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;min-height:100vh;display:flex;align-items:center;
+    padding:130px 0 90px;overflow:hidden;
+    background:
+      radial-gradient(900px 600px at 78% 40%, rgba(242,193,78,.16), transparent 60%),
+      radial-gradient(700px 500px at 10% 90%, rgba(39,194,220,.10), transparent 60%),
+      linear-gradient(180deg,#0b0f19 0%, var(--bg) 100%);
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse at center, #000 20%, transparent 75%);
+  }
+  .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:8px 16px;border-radius:999px;border:1px solid rgba(242,193,78,.35);
+    background:rgba(242,193,78,.07);color:var(--gold);
+    font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  }
+  .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+  .hero h1{
+    margin:26px 0 22px;
+    font-size:clamp(36px,5.2vw,68px);line-height:1.04;font-weight:800;letter-spacing:-.025em;
+    text-transform:uppercase;
+  }
+  .hero h1 .num{
+    background:linear-gradient(135deg,#ffe8a3,var(--gold) 50%,var(--gold-2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lead{font-size:clamp(17px,1.5vw,20px);color:#c9cfdb;max-width:560px}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
+
+  .bonus-strip{
+    margin-top:38px;display:flex;align-items:center;gap:18px;max-width:560px;
+    padding:16px 20px;border-radius:18px;
+    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+    border:1px solid var(--line);
+  }
+  .gift{
+    flex:none;width:54px;height:54px;border-radius:14px;display:grid;place-items:center;
+    background:linear-gradient(135deg,#ff5b5b,#c81e1e);box-shadow:0 10px 24px -8px rgba(230,50,50,.7);
+  }
+  .bonus-strip b{color:#ff6b6b;letter-spacing:.12em;font-size:13px;display:block}
+  .bonus-strip span{font-size:14.5px;color:#d5dae4}
+
+  /* Book 3D */
+  .book-stage{position:relative;display:grid;place-items:center;perspective:1800px;min-height:560px}
+  .sun{
+    position:absolute;width:430px;height:430px;border-radius:50%;top:6%;right:0;
+    background:radial-gradient(circle at 40% 40%,#ffd97a,#f2b632 60%,#c98714);
+    filter:blur(.3px);opacity:.9;
+    box-shadow:0 0 120px 20px rgba(242,193,78,.25);
+  }
+  .book-blue{
+    position:absolute;right:-6%;top:22%;width:300px;height:430px;border-radius:6px 14px 14px 6px;
+    background:linear-gradient(135deg,#1c3f7a,#0e2551 60%,#0a1b3d);
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.8);
+    transform:rotateY(-18deg) rotateZ(4deg);
+    padding:30px 26px;display:flex;flex-direction:column;justify-content:center;
+    border:1px solid rgba(120,170,255,.15);
+  }
+  .book-blue::before{content:"";position:absolute;inset:14px;border:1px solid rgba(90,190,255,.35);border-radius:4px}
+  .book-blue small{font-size:12px;letter-spacing:.12em;color:#b7c8ea;font-weight:700}
+  .book-blue strong{font-size:52px;font-weight:800;letter-spacing:.02em;line-height:1;margin-top:8px}
+  .book{
+    position:relative;width:340px;aspect-ratio:362/534;
+    transform-style:preserve-3d;transform:rotateY(-24deg) rotateX(6deg);
+    transition:transform .8s cubic-bezier(.2,.8,.2,1);
+    animation:float 6s ease-in-out infinite;
+  }
+  .book:hover{transform:rotateY(-8deg) rotateX(2deg)}
+  .book img{
+    width:100%;height:100%;object-fit:cover;border-radius:3px 8px 8px 3px;
+    box-shadow:0 50px 90px -25px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .book::before{ /* spine */
+    content:"";position:absolute;left:0;top:0;bottom:0;width:26px;
+    transform:rotateY(90deg) translateZ(13px) translateX(-13px);transform-origin:left;
+    background:linear-gradient(90deg,#3d1a0f,#6a2f1c);
+  }
+  .book::after{ /* gloss */
+    content:"";position:absolute;inset:0;border-radius:3px 8px 8px 3px;pointer-events:none;
+    background:linear-gradient(100deg,rgba(255,255,255,.18) 0%,transparent 18%,transparent 70%,rgba(255,255,255,.06) 100%);
+  }
+  @keyframes float{0%,100%{translate:0 0}50%{translate:0 -14px}}
+
+  /* ---------- Stats ---------- */
+  .stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2)}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:38px 24px;text-align:center;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:0}
+  .stat b{display:block;font-size:clamp(32px,3.6vw,46px);font-weight:800;letter-spacing:-.02em;
+    background:linear-gradient(135deg,#fff,#c7ccd8);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat b em{font-style:normal;color:var(--gold);-webkit-text-fill-color:var(--gold)}
+  .stat span{font-size:14px;color:var(--muted)}
+
+  /* ---------- Sections ---------- */
+  section.block{padding:120px 0;position:relative}
+  .sec-head{text-align:center;max-width:820px;margin:0 auto 64px}
+  .sec-head .kicker{font-size:12.5px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+  .sec-head h2{margin-top:14px;font-size:clamp(30px,4vw,50px);line-height:1.1;font-weight:800;letter-spacing:-.02em;text-transform:uppercase}
+  .sec-head p{margin-top:18px;color:var(--muted);font-size:17px}
+
+  /* Story */
+  .story{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;align-items:start}
+  .author-card{
+    position:sticky;top:110px;padding:36px;border-radius:var(--radius);
+    background:linear-gradient(160deg,#1a1f2c,#0f131d);border:1px solid var(--line);
+  }
+  .avatar{
+    width:84px;height:84px;border-radius:50%;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--brown),#3b170c);font-size:30px;font-weight:800;
+    border:2px solid rgba(242,193,78,.55);
+  }
+  .author-card h3{margin-top:22px;font-size:24px}
+  .author-card .role{color:var(--muted);font-size:14.5px}
+  .author-card blockquote{
+    margin-top:26px;padding-top:24px;border-top:1px solid var(--line);
+    font-family:"Playfair Display",serif;font-style:italic;font-size:21px;line-height:1.45;color:#e8dcc0;
+  }
+  .story-text p{font-size:18px;color:#cfd4df;margin-bottom:26px}
+  .story-text p:first-child::first-letter{
+    float:left;font-family:"Playfair Display",serif;font-size:72px;line-height:.85;padding:8px 12px 0 0;color:var(--gold);
+  }
+  .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+  .tl{padding:22px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+  .tl b{font-size:28px;color:var(--gold);display:block;line-height:1.1}
+  .tl span{font-size:14px;color:var(--muted)}
+
+  /* Benefits */
+  .benefits{background:linear-gradient(180deg,var(--bg) 0%,#0b1020 50%,var(--bg) 100%)}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{
+    position:relative;padding:40px 34px;border-radius:var(--radius);
+    background:linear-gradient(160deg,#151b29 0%,#0e121c 100%);
+    border:1px solid var(--line);overflow:hidden;
+    transition:transform .35s ease,border-color .35s ease;
+  }
+  .card::before{
+    content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;
+    background:linear-gradient(135deg,rgba(242,193,78,.6),transparent 40%,transparent 60%,rgba(39,194,220,.45));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .35s;
+  }
+  .card:hover{transform:translateY(-8px)}
+  .card:hover::before{opacity:1}
+  .icon{
+    width:60px;height:60px;border-radius:16px;display:grid;place-items:center;margin-bottom:26px;
+    background:rgba(242,193,78,.1);border:1px solid rgba(242,193,78,.3);color:var(--gold);
+  }
+  .card h3{font-size:21px;line-height:1.3;margin-bottom:14px}
+  .card p{color:var(--muted);font-size:15.5px}
+
+  /* Questions */
+  .q-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:1000px;margin:0 auto}
+  .q{
+    display:flex;align-items:center;gap:20px;padding:22px 26px;border-radius:18px;
+    background:var(--card);border:1px solid var(--line);
+    transition:border-color .3s, background .3s, transform .3s;
+  }
+  .q:hover{border-color:rgba(39,194,220,.45);background:#131c2c;transform:translateX(4px)}
+  .q .n{
+    flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+    font-weight:800;color:var(--cyan);background:rgba(39,194,220,.1);border:1px solid rgba(39,194,220,.3);
+  }
+  .q span{font-size:16.5px;font-weight:600}
+  .q-note{text-align:center;margin-top:44px;color:var(--muted);font-size:17px}
+  .center{text-align:center;margin-top:40px}
+
+  /* Audience */
+  .audience{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .aud-list{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1040px;margin:0 auto}
+  .aud{
+    display:flex;gap:24px;align-items:flex-start;padding:32px;border-radius:var(--radius);
+    background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border:1px solid var(--line);
+  }
+  .aud .n{
+    flex:none;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;
+    font-size:24px;font-weight:800;color:#04222a;
+    background:radial-gradient(circle at 30% 30%,#6fe3f5,var(--cyan));
+    box-shadow:0 10px 30px -8px rgba(39,194,220,.6);
+  }
+  .aud p{font-size:18.5px;font-weight:600;line-height:1.5;padding-top:6px}
+
+  /* Offer */
+  .offer{
+    display:grid;grid-template-columns:.9fr 1.1fr;gap:0;border-radius:32px;overflow:hidden;
+    border:1px solid rgba(242,193,78,.25);
+    background:linear-gradient(135deg,#1b1508 0%,#0f0f14 45%,#0b1020 100%);
+    box-shadow:0 50px 120px -40px rgba(242,193,78,.25);
+  }
+  .offer-visual{
+    position:relative;display:grid;place-items:center;padding:60px 30px;
+    background:radial-gradient(circle at 50% 45%,rgba(242,193,78,.35),transparent 60%);
+  }
+  .offer-visual img{width:230px;border-radius:3px 8px 8px 3px;box-shadow:0 40px 70px -20px rgba(0,0,0,.9);transform:rotate(-5deg)}
+  .ribbon{
+    position:absolute;top:28px;left:28px;padding:8px 16px;border-radius:999px;
+    background:linear-gradient(135deg,#ff5b5b,#c81e1e);font-weight:800;font-size:13px;letter-spacing:.14em;
+  }
+  .offer-body{padding:60px 56px}
+  .offer-body h2{font-size:clamp(28px,3.2vw,42px);line-height:1.12;font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+  .offer-body > p{color:#c9cfdb;margin:16px 0 28px}
+  .checks{list-style:none;display:grid;gap:14px;margin-bottom:34px}
+  .checks li{display:flex;gap:14px;align-items:flex-start;font-size:16px}
+  .checks li svg{flex:none;margin-top:3px;color:var(--gold)}
+
+  form.order{display:grid;gap:14px}
+  .field{position:relative}
+  .field input{
+    width:100%;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+    background:rgba(0,0,0,.35);color:var(--text);font:500 16px "Manrope",sans-serif;outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .field input::placeholder{color:#7f889a}
+  .field input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(242,193,78,.12)}
+  form.order .btn{width:100%;margin-top:6px}
+  .form-note{font-size:13px;color:var(--muted);text-align:center}
+  .success{display:none;padding:26px;border-radius:16px;background:rgba(39,194,220,.08);border:1px solid rgba(39,194,220,.35);text-align:center}
+  .success b{display:block;font-size:20px;margin-bottom:6px}
+
+  /* FAQ */
+  .faq{max-width:860px;margin:0 auto;display:grid;gap:14px}
+  details{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:0 26px;transition:border-color .3s}
+  details[open]{border-color:rgba(242,193,78,.35)}
+  summary{list-style:none;cursor:pointer;padding:24px 0;font-weight:700;font-size:17px;display:flex;justify-content:space-between;gap:20px;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-size:26px;font-weight:400;color:var(--gold);transition:transform .3s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{padding-bottom:24px;color:var(--muted)}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line);padding:50px 0 40px;background:#05070b}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
+  .foot small{color:var(--muted)}
+
+  /* Sticky mobile CTA */
+  .mobile-cta{display:none}
+
+  /* Reveal */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .book{animation:none}
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:1000px){
+    .nav-links{display:none}
+    .hero-grid{grid-template-columns:1fr;gap:30px}
+    .hero{text-align:left}
+    .book-stage{min-height:480px;order:-1}
+    .story{grid-template-columns:1fr;gap:40px}
+    .author-card{position:relative;top:0}
+    .cards{grid-template-columns:1fr}
+    .offer{grid-template-columns:1fr}
+    .offer-body{padding:40px 28px}
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .stat:nth-child(2){border-right:0}
+    .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  }
+  @media (max-width:700px){
+    .wrap{padding:0 16px}
+    .tagline{display:none}
+    .phone{font-size:15px}
+    .hero{padding-top:100px}
+    .book{width:230px}
+    .book-blue{width:200px;height:290px;right:2%;padding:20px}
+    .book-blue strong{font-size:34px}
+    .sun{width:280px;height:280px}
+    .book-stage{min-height:380px}
+    .hero-actions .btn{width:100%}
+    section.block{padding:80px 0}
+    .q-wrap,.aud-list,.timeline{grid-template-columns:1fr}
+    .aud{padding:24px;gap:18px}
+    .aud .n{width:50px;height:50px;font-size:20px}
+    .aud p{font-size:16.5px}
+    .mobile-cta{
+      display:block;position:fixed;left:12px;right:12px;bottom:12px;z-index:60;
+      transform:translateY(140%);transition:transform .35s ease;
+    }
+    .mobile-cta.show{transform:none}
+    .mobile-cta .btn{width:100%;padding:17px}
+    footer{padding-bottom:110px}
+  }
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="wrap nav">
+    <a href="#" class="brand" aria-label="insan">
+      <span class="logo">insan</span>
+      <span class="tagline">Biznesni qoidalar asosida tizimlashtiruvchi kompaniya</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#story">Muallif</a>
+      <a href="#benefits">Foydasi</a>
+      <a href="#questions">Mundarija</a>
+      <a href="#audience">Kimlar uchun</a>
+      <a href="#order">Buyurtma</a>
+    </nav>
+    <a class="phone" href="tel:+998970393311">+998 (97) 039-33-11</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="eyebrow"><i></i>Bobur Musaboev · Kodeks</span>
+      <h1>Xodimlar bilan puxta aloqa qurish uchun <span class="num">400 dan ortiq</span> qoida to'plami</h1>
+      <p class="lead">Xodimlar bilan puxta aloqa o'rnatish va nazoratni osonlashtirish uchun ushbu qo'llanma sizga yordam beradi.</p>
+      <div class="hero-actions">
+        <a href="#order" class="btn btn-gold">Ro'yxatdan o'tish</a>
+        <a href="#story" class="btn btn-ghost">Batafsil</a>
+      </div>
+      <div class="bonus-strip">
+        <div class="gift" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>
+        </div>
+        <div>
+          <b>BONUS</b>
+          <span>Kodeksni sotib olish orqali bonusga ega bo'lish uchun ro'yxatdan o'ting</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="book-stage reveal" aria-hidden="true">
+      <div class="sun"></div>
+      <div class="book-blue">
+        <small>BOBUR MUSABOEV</small>
+        <small style="margin-top:40px">BIZNESNI TIZIMLASH UCHUN</small>
+        <strong>KODEKS</strong>
+      </div>
+      <div class="book"><img src="assets/kodeks-cover.webp" alt="Kodeks kitobi muqovasi" width="362" height="534"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="wrap stats-grid">
+    <div class="stat reveal"><b>400<em>+</em></b><span>amaliy qoida</span></div>
+    <div class="stat reveal"><b>30<em>+</em></b><span>biznes mavzusi</span></div>
+    <div class="stat reveal"><b>30<em>+</em></b><span>jarayonga aniq yechim</span></div>
+    <div class="stat reveal"><b>5 <em>yil</em></b><span>tajriba jamlangan</span></div>
+  </div>
+</div>
+
+<!-- STORY -->
+<section class="block" id="story">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Muallif so'zi</div>
+      <h2>Ushbu qo'llanmani nima sababdan va qanday yozdim?</h2>
+    </div>
+    <div class="story">
+      <aside class="author-card reveal">
+        <div class="avatar">BM</div>
+        <h3>Bobur Musaboev</h3>
+        <div class="role">«Kodeks» muallifi, insan asoschisi</div>
+        <blockquote>“Tadbirkorlar yillar sarflab topadigan tajribani bir kitobga jamladim.”</blockquote>
+      </aside>
+      <div class="story-text reveal">
+        <p>Biznesda olgan bilimlarimni amalda qo'llash qiyin bo'lar edi. Lekin ba'zi ustozlarim tufayli sababni og'zaki gaplar bilan emas, qoidalar bilan nazorat qilishni o'rgandim va amalda qo'llab ko'rdim.</p>
+        <p>Xodimlarda qanday muammo bo'lsa, o'sha muammoni bartaraf qilish uchun qoida yozib bordim — va bu usul juda ham ta'sirli hamda manfaatli natija bera boshladi.</p>
+        <p>Oradan 4–5 yil o'tganidan so'ng yozib olingan qoidalar soni 700 ga yaqinlashdi. Ularning tarkibi barcha bizneslarga mos keladigan edi. Bu tajribani kimdir o'z biznesiga yozib chiqishi uchun kamida 5 yil e'tibor qaratishi kerak bo'ladi.</p>
+        <p>Men esa tadbirkorlarning vaqtini tejab qolish uchun ushbu qo'llanmani ulashishni niyat qildim. Ammo bu qo'llanmaning natijasi bebaho bo'lganligi tufayli, bepul yoki arzon bo'lsa qadrsiz bo'lib, natija bermay qolishi mumkin. Shu sababli uni o'z narsasiga yarasha baho bilan sotuvga qo'ydim.</p>
+        <div class="timeline">
+          <div class="tl"><b>1</b><span>Muammo aniqlandi — qoida yozildi</span></div>
+          <div class="tl"><b>700</b><span>qoida 4–5 yilda to'plandi</span></div>
+          <div class="tl"><b>400+</b><span>eng samaralisi kitobga kirdi</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="block benefits" id="benefits">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Natija</div>
+      <h2>Qo'llanma sizga nima beradi?</h2>
+    </div>
+    <div class="cards">
+      <article class="card reveal">
+        <div class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></div>
+        <h3>Xodim olishda qaytadan qiynalmaysiz</h3>
+        <p>Xodimni ishga tushirishda o'rgatilishi kerak bo'lgan hamma narsani qo'llanmada topasiz — yangi xodimlarni ishga moslashtirish oson.</p>
+      </article>
+      <article class="card reveal">
+        <div class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Nazoratni osonlashtirish</h3>
+        <p>Qoida yozilmagan bo'lsa, rahbardan boshqa odam nazorat qila olmaydi va bu rahbarning energiyasini tugatadi. Qo'llanma nazoratni oddiy xodim ham qila olishini ta'minlaydi.</p>
+      </article>
+      <article class="card reveal">
+        <div class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3>Biznes egasi uchun erkin vaqt</h3>
+        <p>Boshqaruv ishini direktor, HR va bo'lim boshliqlariga topshirish osonlashadi — rahbarda oila, sayohat va strategiya uchun ko'proq vaqt qoladi.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- QUESTIONS -->
+<section class="block" id="questions">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Mundarijadan</div>
+      <h2>Qo'llanma qaysi savollarga javob beradi?</h2>
+    </div>
+    <div class="q-wrap">
+      <div class="q reveal"><span class="n">01</span><span>Direktorga qanday qoidalar kerak?</span></div>
+      <div class="q reveal"><span class="n">02</span><span>HR bo'limiga qanday qoidalar kerak?</span></div>
+      <div class="q reveal"><span class="n">03</span><span>Xodimni ishga olishda u bilan qaysi qoidalar tanishtirilishi kerak?</span></div>
+      <div class="q reveal"><span class="n">04</span><span>Mijozlar bilan qanday muomalada bo'lish kerak?</span></div>
+      <div class="q reveal"><span class="n">05</span><span>Sotuv bo'limiga qanday qoidalar kerak?</span></div>
+      <div class="q reveal"><span class="n">06</span><span>Madaniyat qoidalariga kim qanday amal qilishi kerak?</span></div>
+      <div class="q reveal"><span class="n">07</span><span>Xodimlarning itoati va punktualligi qanday bo'lishi kerak?</span></div>
+      <div class="q reveal"><span class="n">08</span><span>Jarimalar va rag'batlar tizimi qanday quriladi?</span></div>
+    </div>
+    <p class="q-note reveal">Shu va shu kabi savollarga qo'llanmada <span class="gold">to'liq javob</span> olasiz.</p>
+    <div class="center reveal"><a href="#order" class="btn btn-gold">Buyurtma berish</a></div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section class="block audience" id="audience">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Kimlar uchun</div>
+      <h2>Kodeks qo'llanmasi kimlarga <span class="cyan">100%</span> yordam beradi?</h2>
+    </div>
+    <div class="aud-list">
+      <div class="aud reveal"><span class="n">1</span><p>Biznesni tartibli yuritmoqchi bo'lgan katta-yu kichik tadbirkorlarga.</p></div>
+      <div class="aud reveal"><span class="n">2</span><p>Nazoratni osonlashtirib, biznesini tizimlashtirmoqchi bo'lgan tadbirkorlarga.</p></div>
+      <div class="aud reveal"><span class="n">3</span><p>Xodimlar boshqaruvida qiyinchilik ko'rayotgan har qanday rahbarlarga.</p></div>
+      <div class="aud reveal"><span class="n">4</span><p>Tizim qurib, o'z biznesini yaratmoqchi bo'lgan biznes egalariga.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER / ORDER -->
+<section class="block" id="order">
+  <div class="wrap">
+    <div class="offer reveal">
+      <div class="offer-visual">
+        <span class="ribbon">+ BONUS</span>
+        <img src="assets/kodeks-cover.webp" alt="Kodeks kitobi" width="362" height="534" loading="lazy">
+      </div>
+      <div class="offer-body">
+        <h2>Kodeksni buyurtma qiling va <span class="gold">bonusga</span> ega bo'ling</h2>
+        <p>Ma'lumotlaringizni qoldiring — menejerimiz siz bilan bog'lanib, buyurtma va bonus tafsilotlarini aytib beradi.</p>
+        <ul class="checks">
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>400 dan ortiq tayyor qoida — bugunoq joriy qilish mumkin</li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>30 dan ortiq mavzu: direktor, HR, sotuv, madaniyat</li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Ro'yxatdan o'tganlar uchun maxsus bonus</li>
+        </ul>
+        <form class="order" id="orderForm" novalidate>
+          <div class="field"><input type="text" name="name" placeholder="Ismingiz" autocomplete="name" required></div>
+          <div class="field"><input type="tel" name="phone" placeholder="+998 __ ___ __ __" autocomplete="tel" required></div>
+          <button class="btn btn-gold" type="submit">Ro'yxatdan o'tish</button>
+          <p class="form-note">Ma'lumotlaringiz uchinchi shaxslarga berilmaydi.</p>
+        </form>
+        <div class="success" id="success">
+          <b>Rahmat! Arizangiz qabul qilindi.</b>
+          Tez orada menejerimiz siz bilan bog'lanadi.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Savol-javob</div>
+      <h2>Ko'p beriladigan savollar</h2>
+    </div>
+    <div class="faq reveal">
+      <details><summary>Kodeks kichik biznes uchun ham mosmi?</summary><p>Ha. Qoidalar barcha bizneslarga mos keladigan tarzda tuzilgan — 3 nafar xodimi bor do'kondan tortib yirik kompaniyagacha.</p></details>
+      <details><summary>Bonusni qanday olaman?</summary><p>Saytda ro'yxatdan o'ting va Kodeksni sotib oling. Menejerimiz bonus tafsilotlarini sizga yetkazadi.</p></details>
+      <details><summary>Qoidalarni biznesimga qanday joriy qilaman?</summary><p>Qo'llanma mavzular bo'yicha tuzilgan: kerakli bo'limni tanlab, qoidalarni xodimlaringiz bilan tanishtirasiz va nazoratni mas'ul xodimga topshirasiz.</p></details>
+      <details><summary>Qanday bog'lansam bo'ladi?</summary><p>Telefon orqali: <a class="gold" href="tel:+998970393311">+998 (97) 039-33-11</a></p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="brand">
+      <span class="logo">insan</span>
+      <span class="tagline">Biznesni qoidalar asosida tizimlashtiruvchi kompaniya</span>
+    </div>
+    <a class="phone" href="tel:+998970393311">+998 (97) 039-33-11</a>
+    <small>© <span id="year">2026</span> insan. Barcha huquqlar himoyalangan.</small>
+  </div>
+</footer>
+
+<div class="mobile-cta" id="mobileCta"><a href="#order" class="btn btn-gold">Buyurtma berish</a></div>
+
+<script>
+  // Header background on scroll + mobile CTA
+  const header = document.querySelector('header');
+  const cta = document.getElementById('mobileCta');
+  const orderSec = document.getElementById('order');
+  const onScroll = () => {
+    header.classList.toggle('scrolled', scrollY > 20);
+    const r = orderSec.getBoundingClientRect();
+    const nearOrder = r.top < innerHeight && r.bottom > 0;
+    cta.classList.toggle('show', scrollY > innerHeight * .8 && !nearOrder);
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 4) * 70 + 'ms';
+    io.observe(el);
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Order form (frontend only — connect to CRM / Telegram bot as needed)
+  const form = document.getElementById('orderForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const phone = form.phone.value.replace(/\D/g, '');
+    let ok = true;
+    [[form.name, name.length >= 2], [form.phone, phone.length >= 9]].forEach(([el, valid]) => {
+      el.style.borderColor = valid ? '' : '#ff6b6b';
+      ok = ok && valid;
+    });
+    if (!ok) return;
+    form.style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+  });
+</script>
+</body>
+</html>
