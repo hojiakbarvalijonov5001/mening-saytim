@@ -612,10 +612,10 @@
   const form = document.getElementById('orderForm');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = form.name.value.trim();
-    const phone = form.phone.value.replace(/\D/g, '');
+    const name = form.elements.name.value.trim();
+    const phone = form.elements.phone.value.replace(/\D/g, '');
     let ok = true;
-    [[form.name, name.length >= 2], [form.phone, phone.length >= 9]].forEach(([el, valid]) => {
+    [[form.elements.name, name.length >= 2], [form.elements.phone, phone.length >= 9]].forEach(([el, valid]) => {
       el.style.borderColor = valid ? '' : '#ff6b6b';
       ok = ok && valid;
     });
