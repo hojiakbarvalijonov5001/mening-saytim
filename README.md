@@ -20,3 +20,8 @@
 2) to'lov havolasi va admin bilan bog'lanish; 3) chekni yuklash; 4) tabrik xabari.
 
 Sahifani ko'rish uchun `index.html` ni brauzerda oching.
+
+## Tilda'ga joylash
+`tilda/kodeks-tilda.html` — butun sahifa bitta kodda (CSS, JS va rasmlar ichida).
+Tilda'da yangi sahifa → "Другое / Boshqa" → **HTML-kod (T123)** bloki → shu fayl ichidagi hamma kodni qo'ying.
+Saytni o'zgartirgandan keyin faylni qayta yig'ing: `python3 tilda/build.py`.
