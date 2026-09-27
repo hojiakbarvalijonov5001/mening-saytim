@@ -1,11 +1,11 @@
 """Tilda uchun bitta HTML kod yig'uvchi skript.
 
 Ishga tushirish: python3 tilda/build.py
-Natija: tilda/kodeks-tilda.html — Tilda'dagi "HTML-kod" (T123) blokiga to'liq qo'yiladi.
-CSS selektorlari #kodeks bilan cheklanadi (Tilda uslublari bilan to'qnashmasligi uchun),
-rasmlar data: URI ko'rinishida kodning ichiga joylanadi.
+Natija: tilda/dist/kodeks.css va tilda/dist/kodeks.js. Ular jsDelivr orqali GitHub'dan
+yuklanadi, Tilda'ning "HTML-kod" (T123) blokiga esa faqat qisqa ulash kodi qo'yiladi
+(tilda/TILDA-KOD.txt). CSS selektorlari #kodeks bilan cheklanadi.
 """
-import base64
+import json
 import pathlib
 import re
 
@@ -55,49 +55,38 @@ def scope_css(css):
     return "\n".join(out)
 
 
-def data_uri(path):
-    mime = {"webp": "image/webp", "png": "image/png", "jpg": "image/jpeg"}[path.suffix[1:]]
-    return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode()
-
+CDN = "https://cdn.jsdelivr.net/gh/hojiakbarvalijonov5001/mening-saytim@{ref}/"
+# Rasmlar joylashgan commit (rasmlar o'zgarsa, shu yerni yangi commit bilan yangilang)
+IMG_REF = "62019b56eb29c6bde076250113494773b192748e"
 
 html = (ROOT / "index.html").read_text()
 css = (ROOT / "assets/css/style.css").read_text()
 js = (ROOT / "assets/js/main.js").read_text()
 
 body = re.search(r"<body>(.*?)</body>", html, re.S).group(1)
-body = body.replace('<script src="assets/js/main.js"></script>', "")
+body = body.replace('<script src="assets/js/main.js"></script>', "").strip()
+body = body.replace('src="assets/img/', 'src="' + CDN.format(ref=IMG_REF) + "assets/img/")
 
-# Rasmlar: har biri kodda faqat bir marta saqlanadi, JS orqali joylanadi
-images = {}
-def swap(m):
-    rel = m.group(1)
-    key = pathlib.Path(rel).stem
-    images[key] = data_uri(ROOT / rel)
-    return f'src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-kimg="{key}"'
-body = re.sub(r'src="(assets/img/[^"]+)"', swap, body)
-
-img_js = "const KODEKS_IMAGES = {\n" + ",\n".join(f'  "{k}": "{v}"' for k, v in images.items()) + "\n};\n" \
-    "document.querySelectorAll('#kodeks [data-kimg]').forEach((img) => { img.src = KODEKS_IMAGES[img.dataset.kimg]; });\n"
-
-fonts = '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">'
-
-out = f"""<!-- KODEKS sotuv sahifasi — Tilda "HTML-kod" (T123) bloki uchun. Qayta yig'ish: python3 tilda/build.py -->
-{fonts}
-<style>
-{scope_css(css)}
+scoped = scope_css(css) + f"""
 {SCOPE} {{ position: relative; overflow-x: hidden; }}
 {SCOPE} :where(h1, h2, h3, h4, p, ul, ol, li, a, span, b, small, label, figure, figcaption, summary) {{ color: inherit; font-family: inherit; }}
-</style>
-<div id="kodeks">
-{body}
-</div>
-<script>
-(function () {{
-{img_js}
-{js}
-}})();
-</script>
 """
-dest = ROOT / "tilda/kodeks-tilda.html"
-dest.write_text(out)
-print(dest, f"{len(out) / 1024:.0f} KB")
+
+bundle = (
+    "/* KODEKS — Tilda uchun yig'ilgan fayl. Qo'lda o'zgartirmang: python3 tilda/build.py */\n"
+    "(function () {\n"
+    "var root = document.getElementById('kodeks');\n"
+    "if (!root) return;\n"
+    f"root.innerHTML = {json.dumps(body, ensure_ascii=False)};\n"
+    f"{js}\n"
+    "})();\n"
+)
+
+dist = ROOT / "tilda/dist"
+dist.mkdir(exist_ok=True)
+(dist / "kodeks.css").write_text(scoped)
+(dist / "kodeks.js").write_text(bundle)
+old = ROOT / "tilda/kodeks-tilda.html"
+if old.exists():
+    old.unlink()
+print("kodeks.css", f"{len(scoped) / 1024:.0f} KB", "| kodeks.js", f"{len(bundle) / 1024:.0f} KB")
