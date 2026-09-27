@@ -15,23 +15,6 @@ const CONFIG = {
 
 document.documentElement.classList.remove("no-js");
 
-/* ---------- Header soyasi ---------- */
-const header = document.querySelector(".header");
-const mobileCta = document.querySelector("[data-mobile-cta]");
-const orderSection = document.getElementById("buyurtma");
-
-const onScroll = () => {
-  const y = window.scrollY;
-  header.classList.toggle("is-scrolled", y > 20);
-
-  if (mobileCta && orderSection) {
-    const r = orderSection.getBoundingClientRect();
-    const orderInView = r.top < window.innerHeight && r.bottom > 0;
-    mobileCta.classList.toggle("is-visible", y > 600 && !orderInView);
-  }
-};
-window.addEventListener("scroll", onScroll, { passive: true });
-onScroll();
 
 /* ---------- Reveal animatsiyalari ---------- */
 const revealEls = document.querySelectorAll(".reveal");

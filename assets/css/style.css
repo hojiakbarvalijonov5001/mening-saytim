@@ -712,3 +712,28 @@ p, li { text-wrap: pretty; }
   .excuses { grid-template-rows: none; }
   .excuse { grid-row: auto; grid-template-rows: auto 1fr; }
 }
+
+/* =========================================================
+   Pastki panel: logo + Buyurtma berish (tepadagi menyu o'rniga)
+   ========================================================= */
+.bottom-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(40, 41, 46, .82);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--line-dark);
+}
+.bottom-bar__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 76px; }
+.bottom-bar .btn--sm { --h: 50px; padding: 0 26px; font-size: 14px; }
+.hero { padding-top: 90px; }
+.footer { padding-bottom: 116px; }
+html { scroll-padding-top: 24px; }
+@media (max-width: 720px) {
+  .bottom-bar__inner { height: 66px; }
+  .bottom-bar .logo__img { width: 38px; }
+  .bottom-bar .logo__text { font-size: 15px; }
+  .bottom-bar .btn--sm { --h: 44px; padding: 0 18px; font-size: 13px; display: inline-flex; }
+  .hero { padding-top: 56px; }
+  .footer { padding-bottom: 100px; }
+}
+.bottom-bar .logo__text, .bottom-bar .btn { white-space: nowrap; }
