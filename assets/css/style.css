@@ -655,3 +655,60 @@ img.author__avatar { object-fit: cover; padding: 0; background: var(--brown); }
 .author-card span { display: block; font-size: 14px; color: rgba(255,255,255,.72); }
 .story__head .stats { margin-top: 18px; }
 @media (max-width: 1080px) { .author-card { max-width: 520px; } }
+
+/* =========================================================
+   Matn joylashuvi va tekislash tuzatishlari
+   ========================================================= */
+h1, h2, h3, .title, .hero__title { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+.title--md { font-size: clamp(38px, 4.6vw, 62px); line-height: 1; max-width: 1000px; }
+
+/* Muammolar: teng 2x2 to'r, raqam matn ustida */
+.problems { grid-template-columns: repeat(2, 1fr); }
+.problem { grid-column: auto !important; min-height: 220px; justify-content: space-between; gap: 28px; padding: 32px 34px 36px; }
+.problem__num { position: static; font-size: 56px; line-height: 1; opacity: .35; }
+.problem p { margin: 0; padding: 0; max-width: none; font-size: 21px; font-weight: 700; line-height: 1.4; opacity: 1; }
+
+/* Hikoya: raqamlar hikoya ostida */
+.story__body .stats { margin-top: 24px; }
+.author-card { max-width: 440px; }
+.author-card img { aspect-ratio: 1 / 1; object-position: center top; }
+
+/* Foydalar: chapdan tekislangan matn */
+.benefit { text-align: left; padding: 24px 24px 34px; }
+.benefit__media { height: 150px; margin-bottom: 26px; }
+.benefit h3 { font-size: 22px; }
+
+/* Mundarija */
+.toc { grid-template-columns: 1.4fr .9fr; }
+
+/* Natijalar */
+.result p { margin-top: 0; font-size: 18px; line-height: 1.55; color: var(--ink); }
+.result--accent p { color: rgba(255,255,255,.88); }
+
+/* Ikki yo'l */
+.path { gap: 22px; }
+.path > p { font-size: 22px; font-weight: 700; line-height: 1.4; }
+.path--old > p { color: rgba(255,255,255,.62); }
+
+@media (max-width: 1080px) {
+  .toc { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .problems { grid-template-columns: 1fr; }
+  .problem { min-height: 0; padding: 26px 24px 28px; gap: 18px; }
+  .problem__num { font-size: 44px; }
+  .problem p { font-size: 18px; }
+  .path > p { font-size: 19px; }
+  .title--md { font-size: 34px; }
+}
+
+/* Bahonalar: ikki kartochkaning oq qismi bir chiziqda boshlanadi */
+.excuses { grid-template-rows: auto auto; }
+.excuse { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
+/* Kafolat sarlavhasi ikki qatorda */
+.guarantee__text h2 { font-size: clamp(48px, 5.4vw, 80px); }
+@media (max-width: 1080px) {
+  .excuses { grid-template-rows: none; }
+  .excuse { grid-row: auto; grid-template-rows: auto 1fr; }
+}
