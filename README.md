@@ -22,6 +22,6 @@
 Sahifani ko'rish uchun `index.html` ni brauzerda oching.
 
 ## Tilda'ga joylash
-`tilda/kodeks-tilda.html` — butun sahifa bitta kodda (CSS, JS va rasmlar ichida).
-Tilda'da yangi sahifa → "Другое / Boshqa" → **HTML-kod (T123)** bloki → shu fayl ichidagi hamma kodni qo'ying.
-Saytni o'zgartirgandan keyin faylni qayta yig'ing: `python3 tilda/build.py`.
+Tilda'ning **HTML-kod (T123)** blokiga `tilda/TILDA-KOD.txt` ichidagi 4 qator qo'yiladi.
+Asosiy fayllar (`tilda/dist/kodeks.css`, `tilda/dist/kodeks.js`) jsDelivr orqali shu repozitoriyadan yuklanadi.
+Saytni o'zgartirgandan keyin: `python3 tilda/build.py`, commit qiling va `TILDA-KOD.txt` dagi commit kodini yangilang.
