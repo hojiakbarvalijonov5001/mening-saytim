@@ -273,7 +273,7 @@ p { margin: 0; }
 /* ---------- 3. Hikoya ---------- */
 .story { background: radial-gradient(900px 600px at 0% 0%, rgba(38,72,170,.25), transparent 60%), var(--bg); }
 .story__grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 80px; align-items: start; }
-.story__head { position: sticky; top: 120px; }
+.story__head { position: static; }
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 44px; }
 .stat {
   background: var(--card-dark); border: 1px solid var(--line-dark); border-radius: var(--r-md);
@@ -636,3 +636,22 @@ p { margin: 0; }
 @media (max-width: 720px) {
   .problem h3, .problem p { padding-right: 56px; }
 }
+
+/* ---------- Logo va muallif rasmi ---------- */
+.logo__img { width: 46px; height: auto; }
+img.author__avatar { object-fit: cover; padding: 0; background: var(--brown); }
+.author-card {
+  position: relative; margin: 36px 0 0; border-radius: var(--r-lg); overflow: hidden;
+  border: 1px solid var(--line-dark); background: var(--card-dark);
+}
+.author-card img { width: 100%; aspect-ratio: 4 / 3.4; object-fit: cover; object-position: center 20%; }
+.author-card figcaption {
+  position: absolute; left: 14px; right: 14px; bottom: 14px;
+  padding: 14px 18px; border-radius: var(--r-sm);
+  background: rgba(7, 8, 12, .72); backdrop-filter: blur(10px);
+  border: 1px solid var(--line-dark);
+}
+.author-card b { display: block; font-size: 18px; }
+.author-card span { display: block; font-size: 14px; color: rgba(255,255,255,.72); }
+.story__head .stats { margin-top: 18px; }
+@media (max-width: 1080px) { .author-card { max-width: 520px; } }
