@@ -2,15 +2,15 @@
    Sayt sozlamalari — shu yerni to'ldiring
    ========================================================= */
 const CONFIG = {
-  // Kitob narxi, masalan: "990 000 so'm". Bo'sh qolsa narx bloki ko'rinmaydi.
+  // Kitob narxi, masalan: "990 000 so'm". Bo'sh qolsa narx ko'rsatilmaydi.
   price: "",
   // Administrator Telegram havolasi, masalan: "https://t.me/biznesjavon_admin"
   telegram: "https://t.me/",
-  // Buyurtmalar yuboriladigan manzil (Telegram bot, Google Sheets webhook va h.k.).
-  // Bo'sh bo'lsa, buyurtma ma'lumotlari Telegram orqali adminga yuborishga taklif qilinadi.
-  orderEndpoint: "",
-  // To'lov sahifasi (Click / Payme havolasi). To'ldirilsa, buyurtmadan so'ng shu sahifaga o'tiladi.
+  // To'lov havolasi (Click / Payme). Buyurtma oynasining 2-bosqichida "To'lov qilish" tugmasi bo'ladi.
   paymentUrl: "",
+  // Buyurtma va chek yuboriladigan manzil (Telegram bot, Google Sheets webhook va h.k.).
+  // multipart/form-data ko'rinishida POST qilinadi: name, phone, address, staff, activity, check (fayl).
+  orderEndpoint: "",
 };
 
 document.documentElement.classList.remove("no-js");
@@ -62,15 +62,52 @@ if (!reduceMotion && "IntersectionObserver" in window) {
 
 /* ---------- Narx va Telegram ---------- */
 if (CONFIG.price) {
-  const wrap = document.querySelector("[data-price-wrap]");
-  document.querySelector("[data-price]").textContent = CONFIG.price;
-  wrap.hidden = false;
+  document.querySelectorAll("[data-price]").forEach((el) => (el.textContent = CONFIG.price));
+  document.querySelectorAll("[data-price-wrap]").forEach((el) => (el.hidden = false));
 }
 document.querySelectorAll("[data-telegram]").forEach((a) => (a.href = CONFIG.telegram));
 document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 
-/* ---------- Telefon maskasi ---------- */
-const phone = document.querySelector('input[name="phone"]');
+/* ---------- Buyurtma oynasi ---------- */
+const modal = document.getElementById("orderModal");
+const infoForm = document.getElementById("stepInfo");
+const checkForm = document.getElementById("stepCheck");
+const order = {};
+
+const showStep = (n) => {
+  modal.querySelectorAll("[data-step]").forEach((el) => (el.hidden = el.dataset.step !== String(n)));
+  modal.querySelectorAll("[data-step-dot]").forEach((el) => {
+    const d = Number(el.dataset.stepDot);
+    el.classList.toggle("is-active", d === n);
+    el.classList.toggle("is-done", d < n || n === 4);
+  });
+  modal.querySelector(".modal__box").scrollTop = 0;
+};
+
+const openModal = () => {
+  if (!modal.open) modal.showModal();
+  if (modal.dataset.finished) { showStep(1); delete modal.dataset.finished; }
+  setTimeout(() => modal.querySelector("[data-step]:not([hidden]) input")?.focus(), 50);
+};
+
+document.querySelectorAll('a[href="#buyurtma"]').forEach((a) =>
+  a.addEventListener("click", (e) => { e.preventDefault(); openModal(); })
+);
+modal.querySelectorAll("[data-modal-close]").forEach((b) => b.addEventListener("click", () => modal.close()));
+modal.addEventListener("click", (e) => { if (e.target === modal) modal.close(); });
+modal.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => showStep(Number(b.dataset.go))));
+
+/* To'lov havolasi */
+const payLink = modal.querySelector("[data-pay-link]");
+if (CONFIG.paymentUrl) {
+  payLink.href = CONFIG.paymentUrl;
+  payLink.hidden = false;
+  modal.querySelector("[data-pay-empty]").hidden = true;
+  modal.querySelector("[data-pay-slot]").classList.add("is-filled");
+}
+
+/* Telefon maskasi */
+const phone = document.getElementById("o-phone");
 const formatPhone = (value) => {
   let d = value.replace(/\D/g, "");
   if (d.startsWith("998")) d = d.slice(3);
@@ -82,62 +119,91 @@ phone.addEventListener("focus", () => { if (!phone.value) phone.value = "+998 ";
 phone.addEventListener("input", () => { phone.value = formatPhone(phone.value); });
 phone.addEventListener("blur", () => { if (phone.value.trim() === "+998") phone.value = ""; });
 
-/* ---------- Buyurtma formasi ---------- */
-const form = document.getElementById("orderForm");
-const msg = form.querySelector(".form__msg");
-const nameInput = form.elements.namedItem("name");
-const phoneInput = form.elements.namedItem("phone");
-
-const setMsg = (text, ok) => {
+const setMsg = (form, text, ok) => {
+  const msg = form.querySelector(".form__msg");
   msg.textContent = text;
-  msg.classList.toggle("is-ok", ok);
+  msg.classList.toggle("is-ok", !!ok);
   msg.classList.toggle("is-err", !ok);
 };
 
-form.addEventListener("submit", async (e) => {
+/* 1-bosqich: savollar */
+infoForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const name = nameInput.value.trim();
-  const tel = phoneInput.value.replace(/\D/g, "");
+  const f = infoForm.elements;
+  const checks = [
+    [f.namedItem("name"), (v) => v.trim().length >= 2],
+    [f.namedItem("phone"), (v) => v.replace(/\D/g, "").length === 12],
+    [f.namedItem("address"), (v) => v.trim().length >= 3],
+    [f.namedItem("staff"), (v) => v !== "" && Number(v) >= 0],
+    [f.namedItem("activity"), (v) => v.trim().length >= 2],
+  ];
+  let ok = true;
+  checks.forEach(([input, test]) => {
+    const valid = test(input.value);
+    input.classList.toggle("is-invalid", !valid);
+    if (!valid) ok = false;
+  });
+  if (!ok) {
+    setMsg(infoForm, "Iltimos, barcha savollarga javob bering. Telefon raqami to'liq bo'lsin.", false);
+    return;
+  }
+  setMsg(infoForm, "", true);
+  ["name", "phone", "address", "staff", "activity"].forEach((k) => (order[k] = f.namedItem(k).value.trim()));
+  showStep(2);
+});
 
-  nameInput.classList.toggle("is-invalid", name.length < 2);
-  phoneInput.classList.toggle("is-invalid", tel.length !== 12);
-  if (name.length < 2 || tel.length !== 12) {
-    setMsg("Iltimos, ismingiz va telefon raqamingizni to'liq kiriting.", false);
+/* 3-bosqich: chek */
+const fileInput = document.getElementById("o-check");
+const uploadText = modal.querySelector("[data-upload-text]");
+const uploadPreview = modal.querySelector("[data-upload-preview]");
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  uploadText.textContent = file.name;
+  fileInput.closest(".upload").classList.remove("is-invalid");
+  if (file.type.startsWith("image/")) {
+    uploadPreview.src = URL.createObjectURL(file);
+    uploadPreview.hidden = false;
+  } else {
+    uploadPreview.hidden = true;
+  }
+});
+
+checkForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const file = fileInput.files[0];
+  if (!file) {
+    fileInput.closest(".upload").classList.add("is-invalid");
+    setMsg(checkForm, "Iltimos, to'lov chekini yuklang.", false);
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    setMsg(checkForm, "Fayl hajmi 10 MB dan oshmasligi kerak.", false);
     return;
   }
 
-  const data = { name, phone: "+" + tel, product: "KODEKS qo'llanmasi", page: location.href, date: new Date().toISOString() };
-  const btn = form.querySelector("button[type=submit]");
+  const btn = checkForm.querySelector("button[type=submit]");
   btn.disabled = true;
+  setMsg(checkForm, "Yuborilmoqda…", true);
 
   try {
     if (CONFIG.orderEndpoint) {
-      const res = await fetch(CONFIG.orderEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const fd = new FormData();
+      Object.entries(order).forEach(([k, v]) => fd.append(k, v));
+      fd.append("product", "KODEKS qo'llanmasi");
+      fd.append("check", file, file.name);
+      const res = await fetch(CONFIG.orderEndpoint, { method: "POST", body: fd });
       if (!res.ok) throw new Error(res.status);
     }
-
-    if (CONFIG.paymentUrl) {
-      setMsg("Rahmat! To'lov sahifasiga o'tmoqdasiz…", true);
-      setTimeout(() => (location.href = CONFIG.paymentUrl), 800);
-      return;
-    }
-
-    if (!CONFIG.orderEndpoint) {
-      // Backend ulanmagan bo'lsa — buyurtmani Telegram orqali adminga yuborish
-      const text = `Assalomu alaykum! KODEKS qo'llanmasiga buyurtma bermoqchiman.\nIsm: ${data.name}\nTelefon: ${data.phone}`;
-      navigator.clipboard?.writeText(text).catch(() => {});
-      setMsg("Rahmat! Buyurtma matni nusxalandi — Telegram'da adminga yuboring.", true);
-      window.open(CONFIG.telegram, "_blank", "noopener");
-    } else {
-      setMsg("Rahmat! Buyurtmangiz qabul qilindi. 1 ish kuni ichida siz bilan bog'lanamiz.", true);
-    }
-    form.reset();
+    setMsg(checkForm, "", true);
+    modal.dataset.finished = "1";
+    infoForm.reset();
+    checkForm.reset();
+    uploadText.textContent = "Chekni tanlash uchun bosing";
+    uploadPreview.hidden = true;
+    showStep(4);
   } catch (err) {
-    setMsg("Xatolik yuz berdi. Iltimos, Telegram orqali murojaat qiling.", false);
+    setMsg(checkForm, "Chekni yuborib bo'lmadi. Qayta urinib ko'ring yoki admin bilan bog'laning.", false);
   } finally {
     btn.disabled = false;
   }

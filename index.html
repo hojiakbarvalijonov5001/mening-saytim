@@ -351,18 +351,7 @@
             <b data-price></b>
           </div>
 
-          <form class="form" id="orderForm" novalidate>
-            <label class="field">
-              <span>Ismingiz</span>
-              <input type="text" id="order-name" name="name" placeholder="Ismingizni kiriting" autocomplete="name" required>
-            </label>
-            <label class="field">
-              <span>Telefon raqamingiz</span>
-              <input type="tel" id="order-phone" name="phone" placeholder="+998 __ ___ __ __" autocomplete="tel" inputmode="tel" required>
-            </label>
-            <button type="submit" class="btn btn--gold btn--lg btn--block">Buyurtma berish</button>
-            <p class="form__msg" role="status" aria-live="polite"></p>
-          </form>
+          <a href="#buyurtma" class="btn btn--gold btn--lg btn--block order__cta">Buyurtma berish</a>
         </div>
       </div>
     </section>
@@ -415,6 +404,112 @@
       <p>© <span data-year>2026</span> Biznes Javon. Biznes kitoblari loyihasi.</p>
     </div>
   </footer>
+
+  <!-- ============ BUYURTMA OYNASI ============ -->
+  <dialog class="modal" id="orderModal" aria-labelledby="modalTitle">
+    <div class="modal__box">
+      <button type="button" class="modal__close" data-modal-close aria-label="Yopish">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+
+      <ol class="steps" aria-label="Buyurtma bosqichlari">
+        <li class="steps__item is-active" data-step-dot="1"><span>1</span>Ma'lumotlar</li>
+        <li class="steps__item" data-step-dot="2"><span>2</span>To'lov</li>
+        <li class="steps__item" data-step-dot="3"><span>3</span>Chek</li>
+      </ol>
+
+      <!-- 1-bosqich: savollar -->
+      <form class="modal__step form" data-step="1" id="stepInfo" novalidate>
+        <h2 class="modal__title" id="modalTitle">Buyurtma berish</h2>
+        <p class="modal__lead">Quyidagi savollarga javob bering.</p>
+
+        <label class="field" for="o-name">
+          <span>Ismingiz?</span>
+          <input type="text" id="o-name" name="name" placeholder="Ismingiz" autocomplete="name" required>
+        </label>
+        <label class="field" for="o-phone">
+          <span>Telefon raqamingiz?</span>
+          <input type="tel" id="o-phone" name="phone" placeholder="+998 __ ___ __ __" autocomplete="tel" inputmode="tel" required>
+        </label>
+        <label class="field" for="o-address">
+          <span>Manzilingiz?</span>
+          <input type="text" id="o-address" name="address" placeholder="Viloyat, shahar/tuman, ko'cha, uy" autocomplete="street-address" required>
+        </label>
+        <div class="field-row">
+          <label class="field" for="o-staff">
+            <span>Xodimlaringiz soni?</span>
+            <input type="number" id="o-staff" name="staff" placeholder="Masalan: 12" min="0" inputmode="numeric" required>
+          </label>
+          <label class="field" for="o-activity">
+            <span>Faoliyatingiz?</span>
+            <input type="text" id="o-activity" name="activity" placeholder="Masalan: savdo, ishlab chiqarish" required>
+          </label>
+        </div>
+
+        <p class="form__msg" role="status" aria-live="polite"></p>
+        <button type="submit" class="btn btn--gold btn--lg btn--block">Keyingi qadam</button>
+      </form>
+
+      <!-- 2-bosqich: to'lov -->
+      <div class="modal__step" data-step="2" hidden>
+        <h2 class="modal__title">To'lov</h2>
+        <p class="modal__lead">Quyidagi havola orqali to'lovni amalga oshiring, so'ng chekni yuklang.</p>
+
+        <div class="pay-price" data-price-wrap hidden>
+          <span>To'lov summasi:</span>
+          <b data-price></b>
+        </div>
+
+        <div class="pay-slot" data-pay-slot>
+          <!-- To'lov havolasi CONFIG.paymentUrl orqali qo'shiladi -->
+          <a href="#" class="btn btn--blue btn--lg btn--block" data-pay-link target="_blank" rel="noopener" hidden>To'lov qilish</a>
+          <p class="pay-slot__empty" data-pay-empty>To'lov havolasi shu yerda bo'ladi</p>
+        </div>
+
+        <button type="button" class="btn btn--gold btn--lg btn--block" data-go="3">To'lov qildim — chekni yuklash</button>
+        <button type="button" class="modal__back" data-go="1">← Ma'lumotlarni o'zgartirish</button>
+
+        <a href="#" class="admin-link" data-telegram target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" class="btn__icon"><path d="M21.5 4.5L2.9 11.7c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.6z"/></svg>
+          <span>Savol bo'lsa, admin bilan bog'lanish</span>
+        </a>
+      </div>
+
+      <!-- 3-bosqich: chek yuklash -->
+      <form class="modal__step form" data-step="3" id="stepCheck" novalidate hidden>
+        <h2 class="modal__title">Chekni yuklang</h2>
+        <p class="modal__lead">To'lov chekining rasmi yoki skrinshotini yuklang.</p>
+
+        <label class="upload" for="o-check">
+          <input type="file" id="o-check" name="check" accept="image/*,application/pdf" required>
+          <span class="upload__icon"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>
+          <span class="upload__text" data-upload-text>Chekni tanlash uchun bosing</span>
+          <img class="upload__preview" data-upload-preview alt="" hidden>
+        </label>
+
+        <p class="form__msg" role="status" aria-live="polite"></p>
+        <button type="submit" class="btn btn--gold btn--lg btn--block">Chekni yuborish</button>
+        <button type="button" class="modal__back" data-go="2">← To'lov sahifasiga qaytish</button>
+
+        <a href="#" class="admin-link" data-telegram target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" class="btn__icon"><path d="M21.5 4.5L2.9 11.7c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.6z"/></svg>
+          <span>Admin bilan bog'lanish</span>
+        </a>
+      </form>
+
+      <!-- 4: yakun -->
+      <div class="modal__step modal__done" data-step="4" hidden>
+        <span class="done__icon"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        <h2 class="modal__title">Tabriklaymiz!</h2>
+        <p class="modal__lead">Chekingiz qabul qilindi. Siz KODEKS qo'llanmasi egasiga aylandingiz. 1 ish kuni ichida siz bilan bog'lanib, qo'llanmani manzilingizga yetkazib berish bo'yicha ma'lumotlarni aniqlashtiramiz.</p>
+        <button type="button" class="btn btn--gold btn--lg btn--block" data-modal-close>Yopish</button>
+        <a href="#" class="admin-link" data-telegram target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" class="btn__icon"><path d="M21.5 4.5L2.9 11.7c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.6z"/></svg>
+          <span>Admin bilan bog'lanish</span>
+        </a>
+      </div>
+    </div>
+  </dialog>
 
   <!-- ============ PASTKI PANEL ============ -->
   <div class="bottom-bar" id="top-bar">

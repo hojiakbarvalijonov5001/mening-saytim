@@ -12,7 +12,11 @@
 `assets/js/main.js` faylining boshidagi `CONFIG` ni to'ldiring:
 - `price` — kitob narxi (bo'sh bo'lsa narx ko'rsatilmaydi)
 - `telegram` — administrator Telegram havolasi
-- `orderEndpoint` — buyurtmalar yuboriladigan manzil (ixtiyoriy)
-- `paymentUrl` — Click/Payme to'lov havolasi (ixtiyoriy)
+- `paymentUrl` — to'lov havolasi (buyurtma oynasining 2-bosqichida "To'lov qilish" tugmasi)
+- `orderEndpoint` — buyurtma va chek yuboriladigan manzil. Bo'sh bo'lsa, ma'lumotlar hech qayerga yuborilmaydi.
+
+## Buyurtma jarayoni
+"Buyurtma berish" tugmasi oyna ochadi: 1) ism, telefon, manzil, xodimlar soni, faoliyat;
+2) to'lov havolasi va admin bilan bog'lanish; 3) chekni yuklash; 4) tabrik xabari.
 
 Sahifani ko'rish uchun `index.html` ni brauzerda oching.
