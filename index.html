@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Biznes Forum — Farg'ona | Bobur Musaboyev</title>
   <meta name="description" content="Farg'ona shahrida katta biznes forum. Sotuvni bir necha barobarga oshirib, xodimlaringizni oson boshqarish sirlari. 10-oktabr, 19:00.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="fonts/anton.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,15 +26,15 @@
         </div>
         <div class="info-item">
           <span class="info-label">Manzil:</span>
-          <span class="info-value">Farg'ona shahri</span>
+          <span class="info-value">Farg'ona sh.</span>
         </div>
       </div>
 
       <div class="pill">Farg'ona shahrida katta biznes forum</div>
 
       <h1 class="headline">
-        <span class="red">Sotuvni bir necha barobarga</span> oshirib,
-        xodimlaringizni oson boshqarish sirlari
+        <span class="red">Sotuvni bir necha barobarga</span>
+        oshirib, xodimlaringizni oson boshqarish <span class="nowrap">sirlari<span class="headline-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span></span>
       </h1>
 
       <p class="subtitle">
@@ -44,13 +43,34 @@
       </p>
 
       <div class="speaker">
-        <img src="images/bobur-musaboyev.jpg" alt="Bobur Musaboyev" class="speaker-photo">
+        <svg class="speaker-bg" viewBox="0 0 400 420" aria-hidden="true">
+          <defs>
+            <g id="clock">
+              <circle r="78" fill="none" stroke="#c9c9c9" stroke-width="3"/>
+              <circle r="70" fill="none" stroke="#dadada" stroke-width="1.5"/>
+              <g stroke="#bdbdbd" stroke-width="3" stroke-linecap="round">
+                <line y1="-62" y2="-52"/><line y1="62" y2="52"/><line x1="-62" x2="-52"/><line x1="62" x2="52"/>
+              </g>
+              <g fill="#c4c4c4" font-family="Georgia, serif" font-size="13" text-anchor="middle">
+                <text y="-38">XII</text><text y="46">VI</text><text x="-42" y="5">IX</text><text x="42" y="5">III</text>
+              </g>
+              <line y2="-40" stroke="#b5b5b5" stroke-width="3" stroke-linecap="round"/>
+              <line x2="28" y2="16" stroke="#b5b5b5" stroke-width="3" stroke-linecap="round"/>
+              <circle r="4" fill="#b5b5b5"/>
+            </g>
+          </defs>
+          <use href="#clock" transform="translate(60 150) scale(1.15)"/>
+          <use href="#clock" transform="translate(355 120) scale(0.9)"/>
+          <use href="#clock" transform="translate(340 330) scale(1.25)"/>
+          <use href="#clock" transform="translate(20 360) scale(0.8)"/>
+        </svg>
+        <img src="images/bobur-musaboyev.webp" alt="Bobur Musaboyev" class="speaker-photo">
         <div class="speaker-card">
           <div class="speaker-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="7" width="20" height="14" rx="2"/>
-              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-              <path d="M2 13h20"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="7" r="3.5"/>
+              <path d="M3 20v-1.5A5.5 5.5 0 0 1 8.5 13H10"/>
+              <path d="M13 19l7-7M16 12h4v4"/>
             </svg>
           </div>
           <div>
@@ -70,63 +90,125 @@
       </h2>
 
       <div class="cards">
+        <!-- 1. Vaqt -->
         <article class="card">
-          <div class="card-visual" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="32" cy="34" r="20"/>
-              <path d="M32 22v12l8 6"/>
-              <path d="M26 8h12M32 8v6"/>
-            </svg>
-          </div>
+          <svg class="card-art" viewBox="0 0 280 170" aria-hidden="true">
+            <defs>
+              <linearGradient id="cream" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dcb2"/><stop offset="1" stop-color="#fbeedb"/></linearGradient>
+              <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2f2f2"/><stop offset=".5" stop-color="#a9a9a9"/><stop offset="1" stop-color="#5e5e5e"/></linearGradient>
+              <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dcdcdc"/></linearGradient>
+            </defs>
+            <rect x="0" y="50" width="280" height="120" rx="6" fill="url(#cream)"/>
+            <!-- kalendar -->
+            <g transform="translate(150 40) rotate(6)">
+              <rect width="100" height="110" rx="6" fill="url(#paper)" stroke="#9a9a9a" stroke-width="1.5"/>
+              <rect width="100" height="26" rx="6" fill="#6d6d6d"/>
+              <g fill="#cfcfcf">
+                <rect x="10" y="36" width="14" height="12" rx="2"/><rect x="31" y="36" width="14" height="12" rx="2"/><rect x="52" y="36" width="14" height="12" rx="2"/><rect x="73" y="36" width="14" height="12" rx="2"/>
+                <rect x="10" y="56" width="14" height="12" rx="2"/><rect x="31" y="56" width="14" height="12" rx="2"/><rect x="73" y="56" width="14" height="12" rx="2"/>
+                <rect x="10" y="76" width="14" height="12" rx="2"/><rect x="31" y="76" width="14" height="12" rx="2"/><rect x="52" y="76" width="14" height="12" rx="2"/><rect x="73" y="76" width="14" height="12" rx="2"/>
+              </g>
+              <rect x="52" y="56" width="14" height="12" rx="2" fill="#555"/>
+              <circle cx="22" cy="0" r="5" fill="#444"/><circle cx="78" cy="0" r="5" fill="#444"/>
+            </g>
+            <!-- budilnik -->
+            <g transform="translate(95 92)">
+              <circle cx="-42" cy="-50" r="18" fill="url(#metal)"/>
+              <circle cx="42" cy="-50" r="18" fill="url(#metal)"/>
+              <line x1="-30" y1="50" x2="-42" y2="68" stroke="#4a4a4a" stroke-width="6" stroke-linecap="round"/>
+              <line x1="30" y1="50" x2="42" y2="68" stroke="#4a4a4a" stroke-width="6" stroke-linecap="round"/>
+              <circle r="60" fill="url(#metal)"/>
+              <circle r="50" fill="#fafafa" stroke="#7a7a7a" stroke-width="2"/>
+              <g stroke="#555" stroke-width="3" stroke-linecap="round">
+                <line y1="-44" y2="-36"/><line y1="44" y2="36"/><line x1="-44" x2="-36"/><line x1="44" x2="36"/>
+              </g>
+              <line y2="-30" stroke="#222" stroke-width="4" stroke-linecap="round"/>
+              <line x2="22" y2="10" stroke="#222" stroke-width="4" stroke-linecap="round"/>
+              <circle r="4" fill="#c4161c"/>
+            </g>
+          </svg>
           <p>
-            <strong>Vaqtingizni o'zingiz boshqarmoqchi bo'lsangiz</strong> —
-            biznesingizni tizimlashtirib, o'zingizga, oilangizga va
+            <strong>Vaqtingizni o'zingiz boshqarmoqchi bo'lsangiz</strong>
+            va biznesingizni tizimlashtirib, o'zingizga, oilangizga,
             do'stlaringizga vaqt ajratishni istasangiz
           </p>
         </article>
 
+        <!-- 2. Jamoa -->
         <article class="card">
-          <div class="card-visual" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="32" cy="20" r="8"/>
-              <circle cx="14" cy="26" r="6"/>
-              <circle cx="50" cy="26" r="6"/>
-              <path d="M18 52v-4a14 14 0 0 1 28 0v4"/>
-              <path d="M4 50v-2a10 10 0 0 1 12-9.8M60 50v-2a10 10 0 0 0-12-9.8"/>
-            </svg>
-          </div>
+          <svg class="card-art" viewBox="0 0 280 170" aria-hidden="true">
+            <defs>
+              <linearGradient id="suitA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a6a6a"/><stop offset="1" stop-color="#2c2c2c"/></linearGradient>
+              <linearGradient id="suitB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a9a9a"/><stop offset="1" stop-color="#5a5a5a"/></linearGradient>
+              <radialGradient id="head" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#e6e6e6"/><stop offset="1" stop-color="#9c9c9c"/></radialGradient>
+            </defs>
+            <rect x="0" y="50" width="280" height="120" rx="6" fill="url(#cream)"/>
+            <g>
+              <!-- orqadagilar -->
+              <circle cx="62" cy="62" r="20" fill="url(#head)"/>
+              <path d="M22 170c0-42 18-70 40-70s40 28 40 70z" fill="url(#suitB)"/>
+              <circle cx="218" cy="62" r="20" fill="url(#head)"/>
+              <path d="M178 170c0-42 18-70 40-70s40 28 40 70z" fill="url(#suitB)"/>
+              <!-- markazdagi lider -->
+              <circle cx="140" cy="48" r="26" fill="url(#head)"/>
+              <path d="M88 170c0-52 22-90 52-90s52 38 52 90z" fill="url(#suitA)"/>
+              <path d="M128 82l12 16 12-16" fill="#f5f5f5"/>
+              <path d="M137 92h6l3 40-6 10-6-10z" fill="#c4161c"/>
+            </g>
+          </svg>
           <p>
             Xodimlarni boshqarishda qiynalayotgan va
             <strong>kuchli jamoa qurishni istasangiz</strong>
           </p>
         </article>
 
+        <!-- 3. Sotuv -->
         <article class="card">
-          <div class="card-visual" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 56h48"/>
-              <rect x="12" y="38" width="8" height="14"/>
-              <rect x="28" y="28" width="8" height="24"/>
-              <rect x="44" y="16" width="8" height="36"/>
-              <path d="M10 28 26 16l10 6 18-14"/>
-              <path d="M46 8h8v8"/>
-            </svg>
-          </div>
+          <svg class="card-art" viewBox="0 0 280 170" aria-hidden="true">
+            <defs>
+              <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8c8c8c"/><stop offset=".5" stop-color="#c8c8c8"/><stop offset="1" stop-color="#7a7a7a"/></linearGradient>
+              <linearGradient id="barTop" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3c3c3c"/><stop offset=".5" stop-color="#6a6a6a"/><stop offset="1" stop-color="#333"/></linearGradient>
+            </defs>
+            <rect x="0" y="50" width="280" height="120" rx="6" fill="url(#cream)"/>
+            <rect x="50" y="118" width="34" height="44" fill="url(#bar)"/>
+            <rect x="98" y="96" width="34" height="66" fill="url(#bar)"/>
+            <rect x="146" y="70" width="34" height="92" fill="url(#bar)"/>
+            <rect x="194" y="38" width="34" height="124" fill="url(#barTop)"/>
+            <rect x="36" y="160" width="208" height="4" rx="2" fill="#555"/>
+            <path d="M40 120 L100 82 L140 96 L214 22" fill="none" stroke="#1f1f1f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M192 18 L222 12 L218 42 Z" fill="#1f1f1f"/>
+            <text x="76" y="40" font-family="Anton, sans-serif" font-size="30" fill="#c4161c">x2</text>
+          </svg>
           <p>
             Sotuv hajmini <strong>kamida 2 barobar oshirishni</strong>
             maqsad qilgan bo'lsangiz
           </p>
         </article>
 
+        <!-- 4. Nasiya -->
         <article class="card">
-          <div class="card-visual" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="6" y="16" width="52" height="34" rx="4"/>
-              <circle cx="32" cy="33" r="7"/>
-              <path d="M14 24h4M46 42h4"/>
-              <path d="M10 10 54 56"/>
-            </svg>
-          </div>
+          <svg class="card-art" viewBox="0 0 280 170" aria-hidden="true">
+            <defs>
+              <linearGradient id="bill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0f0f0"/><stop offset="1" stop-color="#b9b9b9"/></linearGradient>
+            </defs>
+            <rect x="0" y="50" width="280" height="120" rx="6" fill="url(#cream)"/>
+            <!-- nasiya daftari -->
+            <g transform="translate(40 34) rotate(-8)">
+              <rect width="110" height="126" rx="4" fill="url(#paper)" stroke="#8a8a8a" stroke-width="1.5"/>
+              <rect width="14" height="126" fill="#6d6d6d"/>
+              <text x="62" y="26" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="800" font-size="15" fill="#444">NASIYA</text>
+              <g stroke="#bbb" stroke-width="2">
+                <line x1="24" y1="44" x2="100" y2="44"/><line x1="24" y1="60" x2="100" y2="60"/><line x1="24" y1="76" x2="100" y2="76"/><line x1="24" y1="92" x2="100" y2="92"/><line x1="24" y1="108" x2="100" y2="108"/>
+              </g>
+              <path d="M18 12 L106 118 M106 12 L18 118" stroke="#c4161c" stroke-width="6" stroke-linecap="round"/>
+            </g>
+            <!-- pul -->
+            <g transform="translate(150 70)">
+              <g transform="rotate(-18 50 60)"><rect width="100" height="52" rx="4" fill="url(#bill)" stroke="#7d7d7d"/><circle cx="50" cy="26" r="14" fill="none" stroke="#888" stroke-width="2"/></g>
+              <g transform="rotate(-6 50 60)"><rect width="100" height="52" rx="4" fill="url(#bill)" stroke="#7d7d7d"/><circle cx="50" cy="26" r="14" fill="none" stroke="#888" stroke-width="2"/></g>
+              <g transform="rotate(8 50 60)"><rect width="100" height="52" rx="4" fill="url(#bill)" stroke="#6d6d6d"/><circle cx="50" cy="26" r="14" fill="none" stroke="#777" stroke-width="2"/><text x="50" y="32" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#666">$</text></g>
+            </g>
+          </svg>
           <p>
             <strong>Nasiya savdodan butunlay qutulib</strong>,
             moliyaviy barqarorlikka erishmoqchi bo'lsangiz
