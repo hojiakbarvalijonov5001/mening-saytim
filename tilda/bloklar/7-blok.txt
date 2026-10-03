@@ -98,10 +98,10 @@ const nameEl = form.elements.name;
 const phoneEl = form.elements.phone;
 const name = nameEl.value.trim();
 const phone = formatPhone(phoneEl.value);
-nameEl.classList.toggle('invalid', name.length < 2);
+nameEl.classList.toggle('invalid', 2 > name.length);
 phoneEl.classList.toggle('invalid', phone.digits.length !== 9);
 msg.className = 'form__msg';
-if (name.length < 2 || phone.digits.length !== 9) {
+if (2 > name.length || phone.digits.length !== 9) {
 msg.classList.add('err');
 msg.textContent = 'Iltimos, ismingiz va telefon raqamingizni toʻliq kiriting.';
 return;

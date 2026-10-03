@@ -105,6 +105,9 @@ def split_html(text, limit):
     return [p.strip() for p in parts if p.strip()]
 
 
+# Tilda muharriri JS ichidagi "<" ni HTML teg deb oʻylab, kodni shu joyda kesib qoʻyadi
+assert not re.search(r"<(?![a-zA-Z/!])", js), "main.js da '<' bor — uni '>' bilan almashtiring (a < b  ->  b > a)"
+
 js_min = re.sub(r"/\*.*?\*/", "", js, flags=re.S)
 js_min = "\n".join(l.strip() for l in js_min.splitlines() if l.strip() and not l.strip().startswith("//"))
 body_split = body.replace("<main>", "").replace("</main>", "")
