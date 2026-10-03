@@ -41,6 +41,14 @@ document.querySelectorAll('[data-img]').forEach((img) => {
 });
 """ % TILDA_IMAGES
 
+# Ixchamlashtirish: Tilda muharririga qoʻyish oson boʻlsin
+css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+css = re.sub(r"\s+", " ", css)
+css = re.sub(r"\s*([{};,>])\s*", r"\1", css).replace(";}", "}").strip()
+body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
+body = re.sub(r">\s+<", "> <", body)
+body = re.sub(r"\n\s*", "\n", body)
+
 out = f"""<!-- Sherikchilik qoʻllanmasi — Tilda T123 bloki uchun. tilda/build.py orqali yaratilgan -->
 {fonts}
 <style>
@@ -57,4 +65,6 @@ out = f"""<!-- Sherikchilik qoʻllanmasi — Tilda T123 bloki uchun. tilda/build
 
 dest = ROOT / "tilda/tilda-blok.html"
 dest.write_text(out, encoding="utf-8")
-print(f"{dest.relative_to(ROOT)}: {len(out.encode()) // 1024} KB")
+# .txt nusxa: Mac/Telegram uni sahifa sifatida ochmaydi, matnni toʻliq nusxalash oson
+(ROOT / "tilda/tilda-blok.txt").write_text(out, encoding="utf-8")
+print(f"{dest.relative_to(ROOT)}: {len(out.encode()) // 1024} KB, {out.count(chr(10)) + 1} qator")
