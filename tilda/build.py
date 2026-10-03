@@ -65,6 +65,58 @@ out = f"""<!-- Sherikchilik qoʻllanmasi — Tilda T123 bloki uchun. tilda/build
 
 dest = ROOT / "tilda/tilda-blok.html"
 dest.write_text(out, encoding="utf-8")
-# .txt nusxa: Mac/Telegram uni sahifa sifatida ochmaydi, matnni toʻliq nusxalash oson
-(ROOT / "tilda/tilda-blok.txt").write_text(out, encoding="utf-8")
-print(f"{dest.relative_to(ROOT)}: {len(out.encode()) // 1024} KB, {out.count(chr(10)) + 1} qator")
+print(f"{dest.relative_to(ROOT)}: {len(out.encode()) // 1024} KB")
+
+# ---------------------------------------------------------------
+# Tilda T123 bloki hajmi cheklangan — kodni bir nechta kichik bloklarga boʻlamiz.
+# Har bir blok oʻz-oʻzidan toʻgʻri HTML (teglar yopilgan).
+# ---------------------------------------------------------------
+LIMIT = 11000  # bitta blokdagi belgilar soni (xavfsiz chegara)
+
+
+def split_css(text, limit):
+    """CSS ni faqat yuqori darajadagi qoidalar orasidan boʻladi."""
+    parts, start, depth, last_cut = [], 0, 0, 0
+    for i, ch in enumerate(text):
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                if i + 1 - start > limit and last_cut > start:
+                    parts.append(text[start:last_cut])
+                    start = last_cut
+                last_cut = i + 1
+    parts.append(text[start:])
+    return [p for p in parts if p.strip()]
+
+
+def split_html(text, limit):
+    """HTML ni yuqori darajadagi bloklar (header/section/footer/div) orasidan boʻladi."""
+    cuts = [m.start() for m in re.finditer(r'<(?:header|section|footer)\b|<div class="(?:sticky-cta|modal)"', text)]
+    cuts = [c for c in cuts if c > 0] + [len(text)]
+    parts, start, prev = [], 0, 0
+    for c in cuts:
+        if c - start > limit and prev > start:
+            parts.append(text[start:prev])
+            start = prev
+        prev = c
+    parts.append(text[start:])
+    return [p.strip() for p in parts if p.strip()]
+
+
+js_min = re.sub(r"/\*.*?\*/", "", js, flags=re.S)
+js_min = "\n".join(l.strip() for l in js_min.splitlines() if l.strip() and not l.strip().startswith("//"))
+body_split = body.replace("<main>", "").replace("</main>", "")
+
+blocks = [f"<style>{c}</style>" for c in split_css(css, LIMIT)]
+blocks += split_html(body_split, LIMIT)
+blocks.append(f"{fonts}\n<script>\n{images_js}\n{js_min}\n</script>")
+
+out_dir = ROOT / "tilda/bloklar"
+out_dir.mkdir(exist_ok=True)
+for old in out_dir.glob("*.txt"):
+    old.unlink()
+for n, b in enumerate(blocks, 1):
+    (out_dir / f"{n}-blok.txt").write_text(b + "\n", encoding="utf-8")
+    print(f"  bloklar/{n}-blok.txt: {len(b)} belgi")
