@@ -39,6 +39,26 @@ const CONFIG = {
   setInterval(tick, 1000);
 })();
 
+/* ---------- SHERIK va CHILIK soʻzlarini bir xil kenglikka keltirish ---------- */
+(function equalizeHeroWords() {
+  const words = [...document.querySelectorAll('.hero__word-text')];
+  if (words.length !== 2) return;
+  function fit() {
+    words.forEach((w) => { w.style.letterSpacing = ''; w.style.marginRight = ''; });
+    const [a, b] = words;
+    const diff = a.getBoundingClientRect().width - b.getBoundingClientRect().width;
+    const narrow = diff > 0 ? b : a;
+    const gaps = narrow.textContent.length;
+    const base = parseFloat(getComputedStyle(narrow).letterSpacing) || 0;
+    narrow.style.letterSpacing = base + Math.abs(diff) / gaps + 'px';
+    // oxirgi harfdan keyingi boʻshliq soʻzni siljitmasin
+    narrow.style.marginRight = -(Math.abs(diff) / gaps) + 'px';
+  }
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener('resize', fit);
+})();
+
 /* ---------- Popup ---------- */
 const modal = document.getElementById('modal');
 let lastFocus = null;

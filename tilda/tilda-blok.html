@@ -122,7 +122,8 @@ em { font-style: italic; font-weight: 700; color: var(--gold); }
 }
 .hero__word--top { grid-area: top; justify-self: end; align-self: end; padding-bottom: 28px; }
 .hero__word--bottom { grid-area: bottom; justify-self: start; align-self: start; padding-top: 28px; }
-.hero__word--bottom span {
+.hero__word-text { display: inline-block; }
+.hero__word-sub {
   display: block; font-family: var(--font); font-style: italic; font-weight: 700;
   color: var(--gold); font-size: clamp(28px, 3.2vw, 44px); letter-spacing: 0; line-height: 1; margin-top: 10px;
 }
@@ -609,9 +610,9 @@ body.no-scroll { overflow: hidden; }
     <div class="hero__stage">
       <p class="hero__kicker">Sherikchilikda biznes yuritayotgan va biznesni sherikchilikda boshlamoqchi boʻlganlar <b>DIQQATIGA!</b></p>
 
-      <div class="hero__word hero__word--top" aria-hidden="true">SHERIK</div>
+      <div class="hero__word hero__word--top" aria-hidden="true"><span class="hero__word-text">SHERIK</span></div>
       <img class="hero__book" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-img="kitob" alt="«Sherikchilik kitobi + shartnoma tuzish boʻyicha tayyor qoʻllanma» kitobi" width="678" height="1100">
-      <div class="hero__word hero__word--bottom" aria-hidden="true">CHILIK<span>qoʻllanmasi</span></div>
+      <div class="hero__word hero__word--bottom" aria-hidden="true"><span class="hero__word-text">CHILIK</span><span class="hero__word-sub">qoʻllanmasi</span></div>
 
       <div class="hero__copy">
         <h1>Sherikchilikdagi muammolarni <em>unuting!</em></h1>
@@ -1127,6 +1128,26 @@ const CONFIG = {
   }
   tick();
   setInterval(tick, 1000);
+})();
+
+/* ---------- SHERIK va CHILIK soʻzlarini bir xil kenglikka keltirish ---------- */
+(function equalizeHeroWords() {
+  const words = [...document.querySelectorAll('.hero__word-text')];
+  if (words.length !== 2) return;
+  function fit() {
+    words.forEach((w) => { w.style.letterSpacing = ''; w.style.marginRight = ''; });
+    const [a, b] = words;
+    const diff = a.getBoundingClientRect().width - b.getBoundingClientRect().width;
+    const narrow = diff > 0 ? b : a;
+    const gaps = narrow.textContent.length;
+    const base = parseFloat(getComputedStyle(narrow).letterSpacing) || 0;
+    narrow.style.letterSpacing = base + Math.abs(diff) / gaps + 'px';
+    // oxirgi harfdan keyingi boʻshliq soʻzni siljitmasin
+    narrow.style.marginRight = -(Math.abs(diff) / gaps) + 'px';
+  }
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener('resize', fit);
 })();
 
 /* ---------- Popup ---------- */
