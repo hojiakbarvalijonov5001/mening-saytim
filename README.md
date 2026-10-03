@@ -5,7 +5,7 @@ Bobur Musaboyevning «Sherikchilik kitobi + shartnoma tuzish boʻyicha tayyor qo
 ## Tuzilma
 
 - `index.html` — sahifa
-- `assets/css/style.css` — dizayn (qora fon, oltin urgʻu, telefon uchun moslashgan)
+- `assets/css/style.css` — dizayn (qora fon, yashil urgʻu, telefon uchun moslashgan)
 - `assets/js/main.js` — taymer, popup, telefon maskasi, forma
 - `assets/img/` — kitob va muallif rasmlari
 
