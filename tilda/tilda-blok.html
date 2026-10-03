@@ -1042,15 +1042,15 @@ body.no-scroll { overflow: hidden; }
 
 <script>
 /* =========================================================
-   RASMLAR — Tilda'ga yuklagan rasmlaringiz havolasini shu yerga qoʻying
+   RASMLAR — Tilda'ga yuklangan rasmlar havolasi (tilda/build.py dagi TILDA_IMAGES)
    ========================================================= */
 const IMAGES = {
-  kitob: 'BU_YERGA_KITOB_RASMI_HAVOLASI',
-  muallif: 'BU_YERGA_MUALLIF_RASMI_HAVOLASI',
+  kitob: 'https://optim.tildacdn.net/tild3763-3131-4039-a332-646662653965/-/resize/800x/-/format/webp/sherkchilik_new.png.webp',
+  muallif: 'https://optim.tildacdn.net/tild3461-3937-4762-b539-643962353530/-/resize/880x/-/format/webp/DSC00007.JPG.webp',
 };
 document.querySelectorAll('[data-img]').forEach((img) => {
   const url = IMAGES[img.dataset.img];
-  if (url && !url.startsWith('BU_YERGA')) img.src = url;
+  if (url) img.src = url;
 });
 
 /* =========================================================

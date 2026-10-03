@@ -20,20 +20,26 @@ for name, file in (("kitob", "kitob.webp"), ("muallif", "muallif.jpg")):
     body = body.replace(f'src="assets/img/{file}"', f'src="{placeholder}" data-img="{name}"')
 assert "assets/img/" not in body, "yoʻli almashtirilmagan rasm qoldi"
 
+# Tilda'ga yuklangan rasmlar. Retina ekranlarda tiniq chiqishi uchun 2x oʻlchamda.
+TILDA_IMAGES = {
+    "kitob": "https://optim.tildacdn.net/tild3763-3131-4039-a332-646662653965/-/resize/800x/-/format/webp/sherkchilik_new.png.webp",
+    "muallif": "https://optim.tildacdn.net/tild3461-3937-4762-b539-643962353530/-/resize/880x/-/format/webp/DSC00007.JPG.webp",
+}
+
 fonts = re.search(r'<link href="https://fonts.googleapis.com[^>]+>', html).group(0)
 
 images_js = """/* =========================================================
-   RASMLAR — Tilda'ga yuklagan rasmlaringiz havolasini shu yerga qoʻying
+   RASMLAR — Tilda'ga yuklangan rasmlar havolasi (tilda/build.py dagi TILDA_IMAGES)
    ========================================================= */
 const IMAGES = {
-  kitob: 'BU_YERGA_KITOB_RASMI_HAVOLASI',
-  muallif: 'BU_YERGA_MUALLIF_RASMI_HAVOLASI',
+  kitob: '%(kitob)s',
+  muallif: '%(muallif)s',
 };
 document.querySelectorAll('[data-img]').forEach((img) => {
   const url = IMAGES[img.dataset.img];
-  if (url && !url.startsWith('BU_YERGA')) img.src = url;
+  if (url) img.src = url;
 });
-"""
+""" % TILDA_IMAGES
 
 out = f"""<!-- Sherikchilik qoʻllanmasi — Tilda T123 bloki uchun. tilda/build.py orqali yaratilgan -->
 {fonts}
