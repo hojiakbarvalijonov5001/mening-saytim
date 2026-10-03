@@ -39,20 +39,17 @@ const CONFIG = {
   setInterval(tick, 1000);
 })();
 
-/* ---------- SHERIK va CHILIK soʻzlarini bir xil kenglikka keltirish ---------- */
-(function equalizeHeroWords() {
-  const words = [...document.querySelectorAll('.hero__word-text')];
-  if (words.length !== 2) return;
+/* ---------- SHERIKCHILIK soʻzini konteyner kengligiga moslash ---------- */
+(function fitHeroWord() {
+  const word = document.querySelector('.hero__word');
+  const text = word && word.querySelector('.hero__word-text');
+  if (!text) return;
   function fit() {
-    words.forEach((w) => { w.style.letterSpacing = ''; w.style.marginRight = ''; });
-    const [a, b] = words;
-    const diff = a.getBoundingClientRect().width - b.getBoundingClientRect().width;
-    const narrow = diff > 0 ? b : a;
-    const gaps = narrow.textContent.length;
-    const base = parseFloat(getComputedStyle(narrow).letterSpacing) || 0;
-    narrow.style.letterSpacing = base + Math.abs(diff) / gaps + 'px';
-    // oxirgi harfdan keyingi boʻshliq soʻzni siljitmasin
-    narrow.style.marginRight = -(Math.abs(diff) / gaps) + 'px';
+    word.style.fontSize = '';
+    const fs = parseFloat(getComputedStyle(word).fontSize);
+    const target = word.clientWidth;
+    const width = text.getBoundingClientRect().width;
+    if (width && target) word.style.fontSize = Math.min(fs * target / width, 170) + 'px';
   }
   fit();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
