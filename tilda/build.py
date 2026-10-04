@@ -8,6 +8,8 @@ Natija:
 """
 import base64
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,8 +40,12 @@ def minify_css(css):
 
 
 def minify_js(js):
-    js = re.sub(r"/\*.*?\*/", "", js, flags=re.S)
-    return "\n".join(l.strip() for l in js.splitlines() if l.strip() and not l.strip().startswith("//"))
+    """JS ni terser bilan bitta qatorga siqadi (Tilda muharriri ~100 qatordan uzun kodni kesib qo'yadi)."""
+    local = ROOT / "node_modules/.bin/terser"
+    cmd = [str(local)] if local.exists() else ([shutil.which("npx"), "--yes", "terser"] if shutil.which("npx") else None)
+    assert cmd, "terser topilmadi: avval `npm install` qiling"
+    out = subprocess.run(cmd + ["--format", "ascii_only=true"], input=js, capture_output=True, text=True, check=True)
+    return out.stdout.strip()
 
 
 def safe_js(js):
@@ -86,13 +92,14 @@ def build(page, css_files, js_files, single_out, blocks_dir):
     # Kichik rasmlarni (to'lov ikonkalari) CSS ichiga joylaymiz — Tilda'ga alohida yuklash shart emas
     css = re.sub(r"url\(\.\./img/([^)]+)\)", lambda m: "url(data:image/webp;base64,%s)" % base64.b64encode(
         (ROOT / "assets/img" / m.group(1)).read_bytes()).decode(), css)
-    js = "\n".join(read(f) for f in js_files)
+    js_parts = [read(f) for f in js_files]
+    js = "\n".join(js_parts)
 
-    # Tilda muharriri JS ichidagi "<" ni HTML teg deb oʻylab, kodni shu joyda kesib qoʻyadi
+    # Tilda muharriri JS ichidagi "<" ni HTML teg deb o'ylab, kodni shu joyda kesib qo'yadi
     bad = re.search(r"<(?![a-zA-Z/!])", js)
     assert not bad, f"JS da '<' bor ({js[bad.start() - 40:bad.start() + 20]!r}) — uni '>' bilan almashtiring"
 
-    js = js.replace("paymentPage: 'tolov.html'", f"paymentPage: '{TILDA_PAYMENT_PAGE}'")
+    js_parts = [p.replace("paymentPage: 'tolov.html'", f"paymentPage: '{TILDA_PAYMENT_PAGE}'") for p in js_parts]
     # HTML qoidasiga ko'ra atribut ichidagi & -> &amp; (Tilda muharriri aks holda xato ko'rsatadi)
     fonts = re.search(r'<link href="https://fonts.googleapis.com[^>]+>', html).group(0).replace("&", "&amp;")
 
@@ -111,8 +118,13 @@ def build(page, css_files, js_files, single_out, blocks_dir):
         "  if (url) img.src = url;\n"
         "});\n" % ("{" + ", ".join(f"{k}: '{v}'" for k, v in TILDA_IMAGES.items()) + "}")
     )
-    js_safe = safe_js(f"{images_js}\n{minify_js(js)}")
-    script = f"<script>\n{js_safe}\n</script>"
+    # Har bir JS fayl alohida bir qatorli <script> — keyin alohida T123 bloklariga qo'yiladi
+    scripts = [f"<script>{safe_js(minify_js(images_js + chr(10) + js_parts[0]))}</script>"]
+    scripts += [f"<script>{safe_js(minify_js(p))}</script>" for p in js_parts[1:]]
+    for sc in scripts:
+        inner = sc[len("<script>"):-len("</script>")]
+        assert "<" not in inner, "siqilgan JS da '<' paydo bo'ldi"
+    script = "\n".join(scripts)
 
     single = f"{fonts}\n<style>{css}</style>\n{body}\n{script}\n"
     (ROOT / single_out).write_text(single, encoding="utf-8")
@@ -120,7 +132,8 @@ def build(page, css_files, js_files, single_out, blocks_dir):
 
     blocks = [f"<style>{c}</style>" for c in split_css(css, LIMIT)]
     blocks += split_html(body.replace("<main>", "").replace("</main>", ""), LIMIT)
-    blocks.append(f"{fonts}\n{script}")
+    blocks.append(f"{fonts}\n{scripts[0]}")
+    blocks += scripts[1:]
 
     out_dir = ROOT / blocks_dir
     out_dir.mkdir(exist_ok=True)

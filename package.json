@@ -1,0 +1,8 @@
+{
+  "name": "sherikchilik-sayt",
+  "private": true,
+  "description": "Sherikchilik qo'llanmasi sayti. Tilda bloklarini yig'ish: npm install && python3 tilda/build.py",
+  "devDependencies": {
+    "terser": "^5.31.0"
+  }
+}
