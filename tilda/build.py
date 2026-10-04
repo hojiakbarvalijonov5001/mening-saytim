@@ -63,7 +63,7 @@ def scope_css(css):
 
 CDN = "https://cdn.jsdelivr.net/gh/hojiakbarvalijonov5001/mening-saytim@{ref}/"
 # Rasmlar joylashgan commit (rasmlar o'zgarsa, shu yerni yangi commit bilan yangilang)
-IMG_REF = "62019b56eb29c6bde076250113494773b192748e"
+IMG_REF = "0955b404826a75e37c0176df166b0bc02f9b0d20"
 
 html = (ROOT / "index.html").read_text()
 css = (ROOT / "assets/css/style.css").read_text()
