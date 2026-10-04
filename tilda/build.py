@@ -20,8 +20,8 @@ TILDA_IMAGES = {
     # [asosiy, zaxira]: asosiysi — Tilda'ga yuklangan faylning o'zi (qayta ishlanmagan),
     # ochilmasa zaxira (optim) havola ishlatiladi.
     "kitob": [
-        "https://static.tildacdn.net/tild6236-3739-4238-b763-326462306664/kitob.webp",
-        "https://optim.tildacdn.net/tild6236-3739-4238-b763-326462306664/-/resize/600x/-/format/webp/kitob.webp",
+        "https://static.tildacdn.net/tild6163-6338-4163-b965-353938343464/kitob.webp",
+        "https://optim.tildacdn.net/tild6163-6338-4163-b965-353938343464/-/resize/860x/-/format/webp/kitob.webp",
     ],
     "muallif": [
         "https://optim.tildacdn.net/tild6537-6562-4661-b030-363466623236/-/resize/880x/-/format/webp/muallif.jpg.webp",
@@ -30,7 +30,7 @@ TILDA_IMAGES = {
 LOCAL_IMAGES = {"kitob": "kitob.webp", "muallif": "muallif.jpg"}
 
 # Tilda'dagi toʻlov sahifasining manzili (Tilda: Настройки страницы → Адрес страницы)
-TILDA_PAYMENT_PAGE = "/sherikchiliktolov"
+TILDA_PAYMENT_PAGE = "/tolovpagesherikchilik"
 
 LIMIT = 11000  # bitta T123 blokidagi belgilar soni (xavfsiz chegara)
 
