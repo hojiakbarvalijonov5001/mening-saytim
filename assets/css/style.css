@@ -130,11 +130,6 @@ em { font-style: italic; font-weight: 700; color: var(--accent); }
 .hero__copy h1 { font-size: clamp(26px, 2.6vw, 34px); line-height: 1.15; font-weight: 700; margin-bottom: 14px; }
 .hero__copy p { color: #d6d6d6; font-size: 16px; }
 .hero__cta { grid-area: cta; justify-self: end; align-self: center; position: relative; z-index: 3; display: flex; flex-direction: column; align-items: stretch; gap: 18px; padding-top: 12px; }
-.hero__cta-badge {
-  position: absolute; top: 0; left: 24px;
-  background: #000; color: var(--accent); border: 1px solid var(--accent);
-  font-size: 11px; font-weight: 700; letter-spacing: .12em; padding: 3px 10px; border-radius: 100px; z-index: 2;
-}
 
 .bonus-strip {
   position: relative; z-index: 3;
@@ -518,8 +513,7 @@ body.no-scroll { overflow: hidden; }
   .hero__glow { top: 40%; width: 360px; height: 360px; }
   .hero__copy { justify-self: center; max-width: 520px; margin-top: 26px; padding: 0; }
   .hero__cta { justify-self: center; width: 100%; max-width: 420px; }
-  .hero__cta-badge { left: 50%; transform: translateX(-50%); }
-  .btn--xl { padding: 22px 30px; font-size: 17px; }
+    .btn--xl { padding: 22px 30px; font-size: 17px; }
   .bonus-strip { flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 40px; }
 
   .author__grid { grid-template-columns: 1fr; }
