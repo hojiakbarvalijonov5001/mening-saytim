@@ -23,7 +23,7 @@ assert "assets/img/" not in body, "yoʻli almashtirilmagan rasm qoldi"
 # Tilda'ga yuklangan rasmlar. Retina ekranlarda tiniq chiqishi uchun 2x oʻlchamda.
 TILDA_IMAGES = {
     "kitob": "https://optim.tildacdn.net/tild3763-3131-4039-a332-646662653965/-/resize/800x/-/format/webp/sherkchilik_new.png.webp",
-    "muallif": "https://optim.tildacdn.net/tild3461-3937-4762-b539-643962353530/-/resize/880x/-/format/webp/DSC00007.JPG.webp",
+    "muallif": "https://optim.tildacdn.net/tild6537-6562-4661-b030-363466623236/-/resize/880x/-/format/webp/muallif.jpg.webp",
 }
 
 fonts = re.search(r'<link href="https://fonts.googleapis.com[^>]+>', html).group(0)
