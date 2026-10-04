@@ -13,16 +13,22 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SCOPE = "#kodeks"
 
 
+HTML_CLASSES = (".modal-open", ".in-app", ".no-js")
+
+
 def prefix_selector(sel):
     sel = sel.strip()
+    for cls in HTML_CLASSES:
+        # <html> ga qo'yiladigan klasslar: "#kodeks" undan keyin keladi
+        if sel.startswith(cls):
+            rest = sel[len(cls):]
+            return sel if not rest.strip() else f"{cls} {SCOPE}{rest}"
     if not sel or sel.startswith(":root") or sel.startswith("html"):
         return sel
     if sel.startswith("body"):
         return SCOPE + sel[4:]
     if sel.startswith("*"):
         return f"{SCOPE} {sel}"
-    if sel.startswith(".no-js"):
-        return sel
     return f"{SCOPE} {sel}"
 
 

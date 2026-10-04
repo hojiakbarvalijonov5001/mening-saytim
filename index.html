@@ -56,6 +56,7 @@
 
           <div class="hero__actions reveal">
             <a href="#buyurtma" class="btn btn--gold btn--lg">Buyurtma berish</a>
+            <p class="hero__price" data-price-wrap hidden><span>Narxi:</span> <b data-price></b></p>
           </div>
         </div>
 
@@ -376,7 +377,12 @@
         <img src="assets/img/biznes-javon-logo.png" alt="" class="logo__img" width="256" height="194">
         <span class="logo__text">Biznes <b>Javon</b></span>
       </a>
+      <a href="#" class="footer__tg" data-telegram target="_blank" rel="noopener"><svg viewBox="0 0 24 24" class="btn__icon"><path d="M21.5 4.5L2.9 11.7c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.6z"/></svg><span>Admin Telegrami</span></a>
       <p>© <span data-year>2026</span> Biznes Javon. Biznes kitoblari loyihasi.</p>
+    </div>
+    <div class="container footer__legal">
+      <p>«INSAN ACADEMY GROUP» MChJ. Andijon viloyati, Andijon shahri, Mustaqillik shoh ko'chasi, 85-uy. H/R: 2020 8000 9056 2077 4001 · STIR: 309 253 192 · MFO: 440 · OKED: 70 220</p>
+      <p>Ushbu sayt yoki mahsulot Facebook va Google kompaniyalarining bir qismi emas hamda ular tomonidan hech qanday shaklda tasdiqlanmagan. FACEBOOK — Meta Platforms, Inc. kompaniyasining savdo belgisi. YOUTUBE va GOOGLE — Alphabet, Inc. kompaniyasining savdo belgilari.</p>
     </div>
   </footer>
 
@@ -428,17 +434,39 @@
       <!-- 2-bosqich: to'lov -->
       <div class="modal__step" data-step="2" hidden>
         <h2 class="modal__title">To'lov</h2>
-        <p class="modal__lead">Quyidagi havola orqali to'lovni amalga oshiring, so'ng chekni yuklang.</p>
+        <ol class="pay-steps">
+          <li>To'lov uchun o'zingizga qulay ilovani tanlang.</li>
+          <li data-pay-step2>To'lovni amalga oshiring va chekni skrinshot qiling.</li>
+          <li>Chekni saytga yuklang.</li>
+          <li>Adminga to'lov qilganingiz haqida xabar yuboring yoki biz siz bilan tez orada o'zimiz bog'lanamiz.</li>
+        </ol>
 
         <div class="pay-price" data-price-wrap hidden>
           <span>To'lov summasi:</span>
           <b data-price></b>
         </div>
 
-        <div class="pay-slot" data-pay-slot>
-          <!-- To'lov havolasi CONFIG.paymentUrl orqali qo'shiladi -->
-          <a href="#" class="btn btn--blue btn--lg btn--block" data-pay-link target="_blank" rel="noopener" hidden>To'lov qilish</a>
-          <p class="pay-slot__empty" data-pay-empty>To'lov havolasi shu yerda bo'ladi</p>
+        <div class="methods">
+            <a class="method" data-pay="paynet" href="#" target="_blank" rel="noopener">
+              <img class="method__icon" src="assets/img/pay/paynet.webp" alt="" width="80" height="80">
+              <b class="method__name">Paynet</b>
+              <span class="method__go"><span class="method__via">Paynet orqali </span>to'lash →</span>
+            </a>
+            <a class="method" data-pay="payme" href="#" target="_blank" rel="noopener">
+              <img class="method__icon" src="assets/img/pay/payme.webp" alt="" width="80" height="80">
+              <b class="method__name">Payme</b>
+              <span class="method__go"><span class="method__via">Payme orqali </span>to'lash →</span>
+            </a>
+            <a class="method" data-pay="click" href="#" target="_blank" rel="noopener">
+              <img class="method__icon" src="assets/img/pay/click.webp" alt="" width="80" height="80">
+              <b class="method__name">Click</b>
+              <span class="method__go"><span class="method__via">Click orqali </span>to'lash →</span>
+            </a>
+            <a class="method" data-pay="beepul" href="#" target="_blank" rel="noopener">
+              <img class="method__icon" src="assets/img/pay/beepul.webp" alt="" width="80" height="80">
+              <b class="method__name">Beepul</b>
+              <span class="method__go"><span class="method__via">Beepul orqali </span>to'lash →</span>
+            </a>
         </div>
 
         <button type="button" class="btn btn--gold btn--lg btn--block" data-go="3">To'lov qildim — chekni yuklash</button>
@@ -453,7 +481,7 @@
       <!-- 3-bosqich: chek yuklash -->
       <form class="modal__step form" data-step="3" id="stepCheck" novalidate hidden>
         <h2 class="modal__title">Chekni yuklang</h2>
-        <p class="modal__lead">To'lov chekining rasmi yoki skrinshotini yuklang.</p>
+        <p class="modal__lead">To'lov chekining rasmi, skrinshoti yoki PDF faylini yuklang (8 MB gacha).</p>
 
         <label class="upload" for="o-check">
           <input type="file" id="o-check" name="check" accept="image/*,application/pdf" required>
@@ -493,6 +521,10 @@
         <img src="assets/img/biznes-javon-logo.png" alt="" class="logo__img" width="256" height="194">
         <span class="logo__text">Biznes <b>Javon</b></span>
       </a>
+      <div class="bottom-bar__price" data-price-wrap hidden>
+        <small>Narxi</small>
+        <b data-price></b>
+      </div>
       <a href="#buyurtma" class="btn btn--gold btn--sm">Buyurtma berish</a>
     </div>
   </div>

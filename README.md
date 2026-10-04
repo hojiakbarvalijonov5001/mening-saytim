@@ -11,9 +11,9 @@
 ## Ishga tushirishdan oldin
 `assets/js/main.js` faylining boshidagi `CONFIG` ni to'ldiring:
 - `price` — kitob narxi (bo'sh bo'lsa narx ko'rsatilmaydi)
-- `telegram` — administrator Telegram havolasi
-- `paymentUrl` — to'lov havolasi (buyurtma oynasining 2-bosqichida "To'lov qilish" tugmasi)
-- `orderEndpoint` — buyurtma va chek yuboriladigan manzil. Bo'sh bo'lsa, ma'lumotlar hech qayerga yuborilmaydi.
+- `telegram` — admin Telegrami (hozir `https://t.me/insansupport`)
+- `paymentMethods` — Paynet, Payme, Click, Beepul havolalari (to'lov qadamidagi 4 ta kartochka)
+- `orderEndpoint` — Google Apps Script veb-ilova URL'i (`apps-script/README.md`). Bo'sh bo'lsa, ma'lumotlar yuborilmaydi va chekni Telegram orqali yuborish so'raladi.
 
 ## Buyurtma jarayoni
 "Buyurtma berish" tugmasi oyna ochadi: 1) ism, telefon, manzil, xodimlar soni, faoliyat;
