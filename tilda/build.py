@@ -20,7 +20,7 @@ TILDA_IMAGES = {
 LOCAL_IMAGES = {"kitob": "kitob.webp", "muallif": "muallif.jpg"}
 
 # Tilda'dagi toʻlov sahifasining manzili (Tilda: Настройки страницы → Адрес страницы)
-TILDA_PAYMENT_PAGE = "/tolov"
+TILDA_PAYMENT_PAGE = "/sherikchiliktolov"
 
 LIMIT = 11000  # bitta T123 blokidagi belgilar soni (xavfsiz chegara)
 

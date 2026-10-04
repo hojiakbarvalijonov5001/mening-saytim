@@ -37,4 +37,4 @@ Rasm havolalari `tilda/build.py` dagi `TILDA_IMAGES` da.
 
 - To'lov havolalari va logotiplari: `assets/js/config.js` → `paymentMethods`.
 - Arizalar va cheklar Telegram/Google Sheets'ga borishi uchun: `apps-script/README.md` bo'yicha skriptni joylab, URL'ni `config.js` dagi `formEndpoint` ga qo'ying.
-- Tilda: `tilda/tolov-bloklar/` dagi bloklarni alohida sahifaga qo'ying, sahifa manzili `/tolov` bo'lsin.
+- Tilda: `tilda/tolov-bloklar/` dagi bloklarni alohida sahifaga qo'ying, sahifa manzili `/sherikchiliktolov` bo'lsin.
