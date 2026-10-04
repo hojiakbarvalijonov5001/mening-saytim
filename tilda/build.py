@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 # Tilda'ga yuklangan rasmlar. Retina ekranlarda tiniq chiqishi uchun 2x oʻlchamda.
 TILDA_IMAGES = {
-    "kitob": "https://optim.tildacdn.net/tild3763-3131-4039-a332-646662653965/-/resize/800x/-/format/webp/sherkchilik_new.png.webp",
+    "kitob": "https://optim.tildacdn.net/tild6236-3739-4238-b763-326462306664/-/resize/860x/-/format/webp/kitob.webp",
     "muallif": "https://optim.tildacdn.net/tild6537-6562-4661-b030-363466623236/-/resize/880x/-/format/webp/muallif.jpg.webp",
 }
 LOCAL_IMAGES = {"kitob": "kitob.webp", "muallif": "muallif.jpg"}
