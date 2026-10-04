@@ -1,4 +1,4 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hojiakbarvalijonov5001/mening-saytim@e894b4db541f228837890acbcf35d09b22d1e786/tilda/dist/kodeks.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hojiakbarvalijonov5001/mening-saytim@cffd944194e5facc7b0223fc974609b491500fee/tilda/dist/kodeks.css">
 <div id="kodeks"></div>
-<script src="https://cdn.jsdelivr.net/gh/hojiakbarvalijonov5001/mening-saytim@e894b4db541f228837890acbcf35d09b22d1e786/tilda/dist/kodeks.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hojiakbarvalijonov5001/mening-saytim@cffd944194e5facc7b0223fc974609b491500fee/tilda/dist/kodeks.js"></script>
