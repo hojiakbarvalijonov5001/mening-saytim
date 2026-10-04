@@ -13,20 +13,11 @@
   if (q.get('phone')) form.elements.phone.value = formatPhone(q.get('phone')).text;
 })();
 
-/* ---------- To'lov usullari: havola va logotip CONFIG'dan ---------- */
+/* ---------- To'lov usullari: havolalar CONFIG'dan ---------- */
 document.querySelectorAll('[data-pay]').forEach((card) => {
-  const m = CONFIG.paymentMethods[card.dataset.pay] || {};
-  if (m.url) card.href = m.url;
+  const url = CONFIG.paymentMethods[card.dataset.pay];
+  if (url) card.href = url;
   else card.classList.add('is-empty');
-  if (m.logo) {
-    const box = card.querySelector('.method__logo');
-    const name = box.textContent.trim();
-    const img = document.createElement('img');
-    img.src = m.logo;
-    img.alt = name;
-    box.textContent = '';
-    box.appendChild(img);
-  }
 });
 
 /* ---------- Chek tanlash (bosish yoki sudrab tashlash) ---------- */

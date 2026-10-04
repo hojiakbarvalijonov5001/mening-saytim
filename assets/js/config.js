@@ -15,13 +15,12 @@ const CONFIG = {
   // Ro'yxatdan o'tgandan keyin ochiladigan to'lov sahifasi
   paymentPage: 'tolov.html',
 
-  // To'lov usullari: url — to'lov havolasi, logo — rasm havolasi (bo'sh bo'lsa nomi yoziladi)
+  // To'lov havolalari (sahifadagi tartib tolov.html da)
   paymentMethods: {
-    payme: { url: '', logo: '' },
-    paynet: { url: '', logo: '' },
-    click: { url: '', logo: '' },
-    uzum: { url: '', logo: '' },
-    alif: { url: '', logo: '' },
+    paynet: 'https://app.paynet.uz/?m=36600',
+    payme: 'https://payme.uz/fallback/merchant/?id=665970bcb23b231bab8f0283',
+    click: 'https://my.click.uz/services/pay?service_id=34273&merchant_id=21954',
+    beepul: 'https://beepul.uz/actions/payment?qr=2&bT04NjU0JmNyPTg2MA==',
   },
 };
 

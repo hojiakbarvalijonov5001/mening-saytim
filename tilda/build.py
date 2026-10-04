@@ -6,6 +6,7 @@ Natija:
     tilda/tolov-bloklar/N-blok.txt  — toʻlov sahifasi (tolov.html)
     tilda/tilda-blok.html, tilda/tolov-blok.html — har bir sahifa bitta faylda (sinov uchun)
 """
+import base64
 import re
 from pathlib import Path
 
@@ -75,6 +76,9 @@ def split_html(text, limit):
 def build(page, css_files, js_files, single_out, blocks_dir):
     html = read(page)
     css = minify_css("\n".join(read(f) for f in css_files))
+    # Kichik rasmlarni (to'lov ikonkalari) CSS ichiga joylaymiz — Tilda'ga alohida yuklash shart emas
+    css = re.sub(r"url\(\.\./img/([^)]+)\)", lambda m: "url(data:image/webp;base64,%s)" % base64.b64encode(
+        (ROOT / "assets/img" / m.group(1)).read_bytes()).decode(), css)
     js = "\n".join(read(f) for f in js_files)
 
     # Tilda muharriri JS ichidagi "<" ni HTML teg deb oʻylab, kodni shu joyda kesib qoʻyadi
