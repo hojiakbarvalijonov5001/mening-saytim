@@ -161,7 +161,7 @@ em { font-style: italic; font-weight: 700; color: var(--accent); }
 .title-c { text-align: center; font-size: clamp(30px, 4vw, 46px); line-height: 1.15; font-weight: 700; max-width: 900px; margin: 0 auto; }
 .title-sub { text-align: center; color: #ddd; margin: 16px auto 0; max-width: 640px; }
 .eyebrow-grey { color: #9c9c9c; font-size: clamp(18px, 1.9vw, 23px); line-height: 1.25; text-transform: uppercase; }
-.eyebrow-grey--right { text-align: right; }
+.eyebrow-grey--right { text-align: right; font-size: clamp(17px, 1.55vw, 21px); }
 .plus {
   display: inline-grid; place-items: center; flex: none;
   width: 26px; height: 26px; border-radius: 6px;
