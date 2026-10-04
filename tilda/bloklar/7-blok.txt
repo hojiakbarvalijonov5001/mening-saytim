@@ -103,7 +103,7 @@ phoneEl.classList.toggle('invalid', phone.digits.length !== 9);
 msg.className = 'form__msg';
 if (2 > name.length || phone.digits.length !== 9) {
 msg.classList.add('err');
-msg.textContent = 'Iltimos, ismingiz va telefon raqamingizni toʻliq kiriting.';
+msg.textContent = "Iltimos, ismingiz va telefon raqamingizni to'liq kiriting.";
 return;
 }
 const btn = form.querySelector('button[type="submit"]');
@@ -123,16 +123,16 @@ headers: { 'Content-Type': 'text/plain;charset=utf-8' },
 body: JSON.stringify(payload),
 });
 msg.classList.add('ok');
-msg.textContent = 'Rahmat! Arizangiz qabul qilindi. 1 ish kuni ichida siz bilan bogʻlanamiz.';
+msg.textContent = "Rahmat! Arizangiz qabul qilindi. 1 ish kuni ichida siz bilan bog'lanamiz.";
 form.reset();
 } else {
 msg.classList.add('ok');
-msg.textContent = 'Rahmat! Buyurtmani yakunlash uchun administratorga yozing…';
+msg.textContent = "Rahmat! Buyurtmani yakunlash uchun administratorga yozing…";
 setTimeout(() => window.open(CONFIG.telegramAdmin, '_blank', 'noopener'), 700);
 }
 } catch (err) {
 msg.classList.add('err');
-msg.textContent = 'Xatolik yuz berdi. Iltimos, Telegram orqali murojaat qiling.';
+msg.textContent = "Xatolik yuz berdi. Iltimos, Telegram orqali murojaat qiling.";
 } finally {
 btn.disabled = false;
 }

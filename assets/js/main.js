@@ -1,13 +1,13 @@
 /* =========================================================
-   SOZLAMALAR — shu yerdan oʻzgartiring
+   SOZLAMALAR — shu yerdan o'zgartiring
    ========================================================= */
 const CONFIG = {
   // Aksiya tugash sanasi (Toshkent vaqti, UTC+5)
   deadline: '2026-12-31T23:59:59+05:00',
 
-  // Formadagi maʼlumotlar yuboriladigan manzil (POST, JSON).
-  // Masalan: Google Apps Script veb-ilova URL'i yoki oʻz serveringiz.
-  // Boʻsh qolsa, foydalanuvchi administrator Telegramiga yoʻnaltiriladi.
+  // Formadagi ma'lumotlar yuboriladigan manzil (POST, JSON).
+  // Masalan: Google Apps Script veb-ilova URL'i yoki o'z serveringiz.
+  // Bo'sh qolsa, foydalanuvchi administrator Telegramiga yo'naltiriladi.
   formEndpoint: '',
 
   telegramAdmin: 'https://t.me/biznesplanet_admin',
@@ -39,7 +39,7 @@ const CONFIG = {
   setInterval(tick, 1000);
 })();
 
-/* ---------- SHERIKCHILIK soʻzini konteyner kengligiga moslash ---------- */
+/* ---------- SHERIKCHILIK so'zini konteyner kengligiga moslash ---------- */
 (function fitHeroWord() {
   const word = document.querySelector('.hero__word');
   const text = word && word.querySelector('.hero__word-text');
@@ -113,7 +113,7 @@ document.querySelectorAll('.js-lead-form').forEach((form) => {
 
     if (2 > name.length || phone.digits.length !== 9) {
       msg.classList.add('err');
-      msg.textContent = 'Iltimos, ismingiz va telefon raqamingizni toʻliq kiriting.';
+      msg.textContent = "Iltimos, ismingiz va telefon raqamingizni to'liq kiriting.";
       return;
     }
 
@@ -135,16 +135,16 @@ document.querySelectorAll('.js-lead-form').forEach((form) => {
           body: JSON.stringify(payload),
         });
         msg.classList.add('ok');
-        msg.textContent = 'Rahmat! Arizangiz qabul qilindi. 1 ish kuni ichida siz bilan bogʻlanamiz.';
+        msg.textContent = "Rahmat! Arizangiz qabul qilindi. 1 ish kuni ichida siz bilan bog'lanamiz.";
         form.reset();
       } else {
         msg.classList.add('ok');
-        msg.textContent = 'Rahmat! Buyurtmani yakunlash uchun administratorga yozing…';
+        msg.textContent = "Rahmat! Buyurtmani yakunlash uchun administratorga yozing…";
         setTimeout(() => window.open(CONFIG.telegramAdmin, '_blank', 'noopener'), 700);
       }
     } catch (err) {
       msg.classList.add('err');
-      msg.textContent = 'Xatolik yuz berdi. Iltimos, Telegram orqali murojaat qiling.';
+      msg.textContent = "Xatolik yuz berdi. Iltimos, Telegram orqali murojaat qiling.";
     } finally {
       btn.disabled = false;
     }
@@ -162,7 +162,7 @@ if (sticky && 'IntersectionObserver' in window) {
   new IntersectionObserver(([e]) => { leadVisible = e.isIntersecting; update(); }).observe(leadSection);
 }
 
-/* ---------- Paydo boʻlish animatsiyasi ---------- */
+/* ---------- Paydo bo'lish animatsiyasi ---------- */
 if ('IntersectionObserver' in window) {
   const targets = document.querySelectorAll(
     '.ncard, .give__item, .quote, .qlist li, .wcard, .notfor, .grid6__item, .fcard, .money, .module, .banner, .bcard, .offer, .way, .excuses, .lead-box, .faq details, .contact'
