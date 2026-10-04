@@ -42,6 +42,13 @@ def minify_js(js):
     return "\n".join(l.strip() for l in js.splitlines() if l.strip() and not l.strip().startswith("//"))
 
 
+def safe_js(js):
+    """Tilda muharriri uchun JS ni faqat oddiy ASCII belgilar bilan yozadi:
+    lotinchadan boshqa harflar -> \\uXXXX, satrlardagi yakka & -> \\x26 (&& operatori qoladi)."""
+    js = re.sub(r"(?<!&)&(?!&)", r"\\x26", js)
+    return "".join(c if ord(c) <= 126 else "\\u%04x" % ord(c) for c in js)
+
+
 def split_css(text, limit):
     """CSS ni faqat yuqori darajadagi qoidalar orasidan boʻladi."""
     parts, start, depth, last_cut = [], 0, 0, 0
@@ -86,7 +93,8 @@ def build(page, css_files, js_files, single_out, blocks_dir):
     assert not bad, f"JS da '<' bor ({js[bad.start() - 40:bad.start() + 20]!r}) — uni '>' bilan almashtiring"
 
     js = js.replace("paymentPage: 'tolov.html'", f"paymentPage: '{TILDA_PAYMENT_PAGE}'")
-    fonts = re.search(r'<link href="https://fonts.googleapis.com[^>]+>', html).group(0)
+    # HTML qoidasiga ko'ra atribut ichidagi & -> &amp; (Tilda muharriri aks holda xato ko'rsatadi)
+    fonts = re.search(r'<link href="https://fonts.googleapis.com[^>]+>', html).group(0).replace("&", "&amp;")
 
     body = re.search(r"<body>(.*?)<script src=", html, re.S).group(1).strip()
     for name, file in LOCAL_IMAGES.items():
@@ -103,7 +111,8 @@ def build(page, css_files, js_files, single_out, blocks_dir):
         "  if (url) img.src = url;\n"
         "});\n" % ("{" + ", ".join(f"{k}: '{v}'" for k, v in TILDA_IMAGES.items()) + "}")
     )
-    script = f"<script>\n{images_js}\n{minify_js(js)}\n</script>"
+    js_safe = safe_js(f"{images_js}\n{minify_js(js)}")
+    script = f"<script>\n{js_safe}\n</script>"
 
     single = f"{fonts}\n<style>{css}</style>\n{body}\n{script}\n"
     (ROOT / single_out).write_text(single, encoding="utf-8")
