@@ -7,6 +7,7 @@ Natija:
     tilda/tilda-blok.html, tilda/tolov-blok.html — har bir sahifa bitta faylda (sinov uchun)
 """
 import base64
+import json
 import re
 import shutil
 import subprocess
@@ -16,8 +17,15 @@ ROOT = Path(__file__).resolve().parent.parent
 
 # Tilda'ga yuklangan rasmlar. Retina ekranlarda tiniq chiqishi uchun 2x oʻlchamda.
 TILDA_IMAGES = {
-    "kitob": "https://optim.tildacdn.net/tild6236-3739-4238-b763-326462306664/-/resize/860x/-/format/webp/kitob.webp",
-    "muallif": "https://optim.tildacdn.net/tild6537-6562-4661-b030-363466623236/-/resize/880x/-/format/webp/muallif.jpg.webp",
+    # [asosiy, zaxira]: asosiysi — Tilda'ga yuklangan faylning o'zi (qayta ishlanmagan),
+    # ochilmasa zaxira (optim) havola ishlatiladi.
+    "kitob": [
+        "https://static.tildacdn.net/tild6236-3739-4238-b763-326462306664/kitob.webp",
+        "https://optim.tildacdn.net/tild6236-3739-4238-b763-326462306664/-/resize/600x/-/format/webp/kitob.webp",
+    ],
+    "muallif": [
+        "https://optim.tildacdn.net/tild6537-6562-4661-b030-363466623236/-/resize/880x/-/format/webp/muallif.jpg.webp",
+    ],
 }
 LOCAL_IMAGES = {"kitob": "kitob.webp", "muallif": "muallif.jpg"}
 
@@ -114,9 +122,11 @@ def build(page, css_files, js_files, single_out, blocks_dir):
     images_js = (
         "const IMAGES = %s;\n"
         "document.querySelectorAll('[data-img]').forEach((img) => {\n"
-        "  const url = IMAGES[img.dataset.img];\n"
-        "  if (url) img.src = url;\n"
-        "});\n" % ("{" + ", ".join(f"{k}: '{v}'" for k, v in TILDA_IMAGES.items()) + "}")
+        "  const urls = IMAGES[img.dataset.img] || [];\n"
+        "  let i = 0;\n"
+        "  img.onerror = () => { i += 1; if (urls[i]) img.src = urls[i]; };\n"
+        "  if (urls[0]) img.src = urls[0];\n"
+        "});\n" % json.dumps(TILDA_IMAGES)
     )
     # Har bir JS fayl alohida bir qatorli <script> — keyin alohida T123 bloklariga qo'yiladi
     scripts = [f"<script>{safe_js(minify_js(images_js + chr(10) + js_parts[0]))}</script>"]

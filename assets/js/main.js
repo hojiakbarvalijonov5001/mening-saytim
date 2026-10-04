@@ -114,15 +114,11 @@ document.querySelectorAll('.js-lead-form').forEach((form) => {
   });
 });
 
-/* ---------- Mobil pastki tugma ---------- */
-const sticky = document.querySelector('.sticky-cta');
-const hero = document.querySelector('.hero');
-const leadSection = document.getElementById('royxat');
-if (sticky && 'IntersectionObserver' in window) {
-  let heroVisible = true, leadVisible = false;
-  const update = () => sticky.classList.toggle('show', !heroVisible && !leadVisible);
-  new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; update(); }).observe(hero);
-  new IntersectionObserver(([e]) => { leadVisible = e.isIntersecting; update(); }).observe(leadSection);
+/* ---------- Mobil pastki tugma: doim ko'rinadi ----------
+   Telegram, Instagram va Facebook ichidagi brauzerlarda pastki asboblar paneli
+   sahifa ustida turadi — shunday brauzerda tugmani uning ustiga ko'taramiz. */
+if (window.TelegramWebviewProxy || window.TelegramWebview || /Telegram|Instagram|FBAN|FBAV|FB_IAB/i.test(navigator.userAgent)) {
+  document.documentElement.classList.add('in-app');
 }
 
 /* ---------- Paydo bo'lish animatsiyasi ---------- */
