@@ -1,0 +1,163 @@
+/* =========================================================
+   TO'LOV SAHIFASI
+   Diqqat: Tilda muharriri "kichik" belgisini HTML teg deb o'ylaydi —
+   bu faylda taqqoslashlarni faqat "katta" (>) belgisi bilan yozing.
+   ========================================================= */
+
+/* ---------- Asosiy sahifadan kelgan ism va telefonni to'ldirish ---------- */
+(function prefill() {
+  const q = new URLSearchParams(location.search);
+  const form = document.querySelector('.js-receipt-form');
+  if (!form) return;
+  if (q.get('name')) form.elements.name.value = q.get('name');
+  if (q.get('phone')) form.elements.phone.value = formatPhone(q.get('phone')).text;
+})();
+
+/* ---------- To'lov usullari: havola va logotip CONFIG'dan ---------- */
+document.querySelectorAll('[data-pay]').forEach((card) => {
+  const m = CONFIG.paymentMethods[card.dataset.pay] || {};
+  if (m.url) card.href = m.url;
+  else card.classList.add('is-empty');
+  if (m.logo) {
+    const box = card.querySelector('.method__logo');
+    const name = box.textContent.trim();
+    const img = document.createElement('img');
+    img.src = m.logo;
+    img.alt = name;
+    box.textContent = '';
+    box.appendChild(img);
+  }
+});
+
+/* ---------- Chek tanlash (bosish yoki sudrab tashlash) ---------- */
+const MAX_MB = 8;
+const drop = document.querySelector('.drop');
+const fileInput = document.querySelector('.drop__input');
+const fileLabel = document.querySelector('.drop__file');
+const preview = document.querySelector('.drop__preview');
+
+function showFile(file) {
+  drop.classList.remove('invalid');
+  fileLabel.textContent = file ? file.name : '';
+  if (file && file.type.startsWith('image/')) {
+    preview.src = URL.createObjectURL(file);
+    preview.hidden = false;
+  } else {
+    preview.hidden = true;
+    preview.removeAttribute('src');
+  }
+}
+if (fileInput) {
+  fileInput.addEventListener('change', () => showFile(fileInput.files[0]));
+  ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, () => drop.classList.add('is-over')));
+  ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, () => drop.classList.remove('is-over')));
+}
+
+/* Katta rasmni yuborishdan oldin kichraytiramiz (1600px, JPEG) */
+function compressImage(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 1600;
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      const data = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+      resolve({ name: file.name.replace(/\.[^.]+$/, '') + '.jpg', type: 'image/jpeg', data });
+    };
+    img.onerror = () => resolve(null);
+    img.src = URL.createObjectURL(file);
+  });
+}
+function readFile(file) {
+  return new Promise((resolve) => {
+    const r = new FileReader();
+    r.onload = () => resolve({ name: file.name, type: file.type, data: String(r.result).split(',')[1] });
+    r.onerror = () => resolve(null);
+    r.readAsDataURL(file);
+  });
+}
+
+/* ---------- Chekni yuborish ---------- */
+const receiptForm = document.querySelector('.js-receipt-form');
+if (receiptForm) {
+  receiptForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = receiptForm.querySelector('.form__msg');
+    const nameEl = receiptForm.elements.name;
+    const phoneEl = receiptForm.elements.phone;
+    const name = nameEl.value.trim();
+    const phone = formatPhone(phoneEl.value);
+    const file = fileInput.files[0];
+    const tooBig = file && file.size > MAX_MB * 1024 * 1024;
+
+    nameEl.classList.toggle('invalid', 2 > name.length);
+    phoneEl.classList.toggle('invalid', phone.digits.length !== 9);
+    drop.classList.toggle('invalid', !file || tooBig);
+    msg.className = 'form__msg';
+
+    if (2 > name.length || phone.digits.length !== 9 || !file) {
+      msg.classList.add('err');
+      msg.textContent = "Iltimos, ism, telefon raqamini kiriting va chekni tanlang.";
+      return;
+    }
+    if (tooBig) {
+      msg.classList.add('err');
+      msg.textContent = 'Fayl juda katta (' + MAX_MB + ' MB dan oshmasin).';
+      return;
+    }
+
+    if (!CONFIG.formEndpoint) {
+      msg.classList.add('err');
+      msg.textContent = "Chekni yuklash hali sozlanmagan. Iltimos, chekni adminga Telegram orqali yuboring.";
+      setTimeout(() => window.open(CONFIG.telegramAdmin, '_blank', 'noopener'), 900);
+      return;
+    }
+
+    const btn = receiptForm.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    msg.textContent = 'Yuborilmoqda…';
+    try {
+      const packed = file.type.startsWith('image/') ? await compressImage(file) : await readFile(file);
+      if (!packed) throw new Error('read');
+      await fetch(CONFIG.formEndpoint, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          type: 'receipt',
+          name,
+          phone: '+998' + phone.digits,
+          source: location.href,
+          date: new Date().toISOString(),
+          file: packed,
+        }),
+      });
+      msg.classList.add('ok');
+      msg.textContent = "Rahmat! Chekingiz qabul qilindi. Biz siz bilan tez orada bog'lanamiz.";
+      receiptForm.reset();
+      showFile(null);
+    } catch (err) {
+      msg.classList.add('err');
+      msg.textContent = "Xatolik yuz berdi. Iltimos, chekni adminga Telegram orqali yuboring.";
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
+/* ---------- Paydo bo'lish animatsiyasi ---------- */
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.step, .method, .upload-box, .contact').forEach((el, i) => {
+    el.classList.add('reveal');
+    el.style.transitionDelay = (i % 4) * 60 + 'ms';
+    io.observe(el);
+  });
+}

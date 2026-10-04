@@ -1,77 +1,44 @@
-"""Saytni Tilda'ning T123 («HTML-код») bloki uchun bitta faylga yigʻadi.
+"""Saytni Tilda'ning T123 («HTML-код») bloklari uchun yigʻadi.
 
 Ishlatish:  python3 tilda/build.py
-Natija:     tilda/tilda-blok.html
+Natija:
+    tilda/bloklar/N-blok.txt        — asosiy sahifa (index.html)
+    tilda/tolov-bloklar/N-blok.txt  — toʻlov sahifasi (tolov.html)
+    tilda/tilda-blok.html, tilda/tolov-blok.html — har bir sahifa bitta faylda (sinov uchun)
 """
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-html = (ROOT / "index.html").read_text(encoding="utf-8")
-css = (ROOT / "assets/css/style.css").read_text(encoding="utf-8")
-js = (ROOT / "assets/js/main.js").read_text(encoding="utf-8")
-
-# <body> ichidagi kontent (skript tegisiz)
-body = re.search(r"<body>(.*?)<script src=", html, re.S).group(1).strip()
-
-# Rasmlar: manzili bitta joydan (IMAGES) qoʻyiladi
-placeholder = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-for name, file in (("kitob", "kitob.webp"), ("muallif", "muallif.jpg")):
-    body = body.replace(f'src="assets/img/{file}"', f'src="{placeholder}" data-img="{name}"')
-assert "assets/img/" not in body, "yoʻli almashtirilmagan rasm qoldi"
 
 # Tilda'ga yuklangan rasmlar. Retina ekranlarda tiniq chiqishi uchun 2x oʻlchamda.
 TILDA_IMAGES = {
     "kitob": "https://optim.tildacdn.net/tild3763-3131-4039-a332-646662653965/-/resize/800x/-/format/webp/sherkchilik_new.png.webp",
     "muallif": "https://optim.tildacdn.net/tild6537-6562-4661-b030-363466623236/-/resize/880x/-/format/webp/muallif.jpg.webp",
 }
+LOCAL_IMAGES = {"kitob": "kitob.webp", "muallif": "muallif.jpg"}
 
-fonts = re.search(r'<link href="https://fonts.googleapis.com[^>]+>', html).group(0)
+# Tilda'dagi toʻlov sahifasining manzili (Tilda: Настройки страницы → Адрес страницы)
+TILDA_PAYMENT_PAGE = "/tolov"
 
-images_js = """/* =========================================================
-   RASMLAR — Tilda'ga yuklangan rasmlar havolasi (tilda/build.py dagi TILDA_IMAGES)
-   ========================================================= */
-const IMAGES = {
-  kitob: '%(kitob)s',
-  muallif: '%(muallif)s',
-};
-document.querySelectorAll('[data-img]').forEach((img) => {
-  const url = IMAGES[img.dataset.img];
-  if (url) img.src = url;
-});
-""" % TILDA_IMAGES
+LIMIT = 11000  # bitta T123 blokidagi belgilar soni (xavfsiz chegara)
 
-# Ixchamlashtirish: Tilda muharririga qoʻyish oson boʻlsin
-css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
-css = re.sub(r"\s+", " ", css)
-css = re.sub(r"\s*([{};,>])\s*", r"\1", css).replace(";}", "}").strip()
-body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
-body = re.sub(r">\s+<", "> <", body)
-body = re.sub(r"\n\s*", "\n", body)
+PLACEHOLDER = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
 
-out = f"""<!-- Sherikchilik qoʻllanmasi — Tilda T123 bloki uchun. tilda/build.py orqali yaratilgan -->
-{fonts}
-<style>
-{css}
-</style>
 
-{body}
+def read(rel):
+    return (ROOT / rel).read_text(encoding="utf-8")
 
-<script>
-{images_js}
-{js}
-</script>
-"""
 
-dest = ROOT / "tilda/tilda-blok.html"
-dest.write_text(out, encoding="utf-8")
-print(f"{dest.relative_to(ROOT)}: {len(out.encode()) // 1024} KB")
+def minify_css(css):
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    css = re.sub(r"\s+", " ", css)
+    return re.sub(r"\s*([{};,>])\s*", r"\1", css).replace(";}", "}").strip()
 
-# ---------------------------------------------------------------
-# Tilda T123 bloki hajmi cheklangan — kodni bir nechta kichik bloklarga boʻlamiz.
-# Har bir blok oʻz-oʻzidan toʻgʻri HTML (teglar yopilgan).
-# ---------------------------------------------------------------
-LIMIT = 11000  # bitta blokdagi belgilar soni (xavfsiz chegara)
+
+def minify_js(js):
+    js = re.sub(r"/\*.*?\*/", "", js, flags=re.S)
+    return "\n".join(l.strip() for l in js.splitlines() if l.strip() and not l.strip().startswith("//"))
 
 
 def split_css(text, limit):
@@ -105,21 +72,53 @@ def split_html(text, limit):
     return [p.strip() for p in parts if p.strip()]
 
 
-# Tilda muharriri JS ichidagi "<" ni HTML teg deb oʻylab, kodni shu joyda kesib qoʻyadi
-assert not re.search(r"<(?![a-zA-Z/!])", js), "main.js da '<' bor — uni '>' bilan almashtiring (a < b  ->  b > a)"
+def build(page, css_files, js_files, single_out, blocks_dir):
+    html = read(page)
+    css = minify_css("\n".join(read(f) for f in css_files))
+    js = "\n".join(read(f) for f in js_files)
 
-js_min = re.sub(r"/\*.*?\*/", "", js, flags=re.S)
-js_min = "\n".join(l.strip() for l in js_min.splitlines() if l.strip() and not l.strip().startswith("//"))
-body_split = body.replace("<main>", "").replace("</main>", "")
+    # Tilda muharriri JS ichidagi "<" ni HTML teg deb oʻylab, kodni shu joyda kesib qoʻyadi
+    bad = re.search(r"<(?![a-zA-Z/!])", js)
+    assert not bad, f"JS da '<' bor ({js[bad.start() - 40:bad.start() + 20]!r}) — uni '>' bilan almashtiring"
 
-blocks = [f"<style>{c}</style>" for c in split_css(css, LIMIT)]
-blocks += split_html(body_split, LIMIT)
-blocks.append(f"{fonts}\n<script>\n{images_js}\n{js_min}\n</script>")
+    js = js.replace("paymentPage: 'tolov.html'", f"paymentPage: '{TILDA_PAYMENT_PAGE}'")
+    fonts = re.search(r'<link href="https://fonts.googleapis.com[^>]+>', html).group(0)
 
-out_dir = ROOT / "tilda/bloklar"
-out_dir.mkdir(exist_ok=True)
-for old in out_dir.glob("*.txt"):
-    old.unlink()
-for n, b in enumerate(blocks, 1):
-    (out_dir / f"{n}-blok.txt").write_text(b + "\n", encoding="utf-8")
-    print(f"  bloklar/{n}-blok.txt: {len(b)} belgi")
+    body = re.search(r"<body>(.*?)<script src=", html, re.S).group(1).strip()
+    for name, file in LOCAL_IMAGES.items():
+        body = body.replace(f'src="assets/img/{file}"', f'src="{PLACEHOLDER}" data-img="{name}"')
+    assert "assets/img/" not in body, "yoʻli almashtirilmagan rasm qoldi"
+    body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
+    body = re.sub(r">\s+<", "> <", body)
+    body = re.sub(r"\n\s*", "\n", body)
+
+    images_js = (
+        "const IMAGES = %s;\n"
+        "document.querySelectorAll('[data-img]').forEach((img) => {\n"
+        "  const url = IMAGES[img.dataset.img];\n"
+        "  if (url) img.src = url;\n"
+        "});\n" % ("{" + ", ".join(f"{k}: '{v}'" for k, v in TILDA_IMAGES.items()) + "}")
+    )
+    script = f"<script>\n{images_js}\n{minify_js(js)}\n</script>"
+
+    single = f"{fonts}\n<style>{css}</style>\n{body}\n{script}\n"
+    (ROOT / single_out).write_text(single, encoding="utf-8")
+    print(f"{single_out}: {len(single.encode()) // 1024} KB")
+
+    blocks = [f"<style>{c}</style>" for c in split_css(css, LIMIT)]
+    blocks += split_html(body.replace("<main>", "").replace("</main>", ""), LIMIT)
+    blocks.append(f"{fonts}\n{script}")
+
+    out_dir = ROOT / blocks_dir
+    out_dir.mkdir(exist_ok=True)
+    for old in out_dir.glob("*.txt"):
+        old.unlink()
+    for n, b in enumerate(blocks, 1):
+        (out_dir / f"{n}-blok.txt").write_text(b + "\n", encoding="utf-8")
+        print(f"  {blocks_dir}/{n}-blok.txt: {len(b)} belgi")
+
+
+build("index.html", ["assets/css/style.css"], ["assets/js/config.js", "assets/js/main.js"],
+      "tilda/tilda-blok.html", "tilda/bloklar")
+build("tolov.html", ["assets/css/tolov.css"], ["assets/js/config.js", "assets/js/tolov.js"],
+      "tilda/tolov-blok.html", "tilda/tolov-bloklar")

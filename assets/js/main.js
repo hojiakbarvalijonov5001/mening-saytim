@@ -1,18 +1,3 @@
-/* =========================================================
-   SOZLAMALAR — shu yerdan o'zgartiring
-   ========================================================= */
-const CONFIG = {
-  // Aksiya tugash sanasi (Toshkent vaqti, UTC+5)
-  deadline: '2026-12-31T23:59:59+05:00',
-
-  // Formadagi ma'lumotlar yuboriladigan manzil (POST, JSON).
-  // Masalan: Google Apps Script veb-ilova URL'i yoki o'z serveringiz.
-  // Bo'sh qolsa, foydalanuvchi administrator Telegramiga yo'naltiriladi.
-  formEndpoint: '',
-
-  telegramAdmin: 'https://t.me/biznesplanet_admin',
-};
-
 /* ---------- Teskari sanoq ---------- */
 (function countdown() {
   const end = new Date(CONFIG.deadline).getTime();
@@ -78,25 +63,6 @@ document.querySelectorAll('[data-close-modal]').forEach((b) => b.addEventListene
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 if (location.hash === '#popup:sherikchilik' || location.hash === '#buyurtma') openModal();
 
-/* ---------- Telefon maskasi: +998 (XX) XXX-XX-XX ---------- */
-function formatPhone(value) {
-  let digits = value.replace(/\D/g, '');
-  if (digits.startsWith('998')) digits = digits.slice(3);
-  digits = digits.slice(0, 9);
-  let out = '+998';
-  if (digits.length) out += ' (' + digits.slice(0, 2);
-  if (digits.length >= 2) out += ')';
-  if (digits.length > 2) out += ' ' + digits.slice(2, 5);
-  if (digits.length > 5) out += '-' + digits.slice(5, 7);
-  if (digits.length > 7) out += '-' + digits.slice(7, 9);
-  return { text: out, digits };
-}
-document.querySelectorAll('input[type="tel"]').forEach((input) => {
-  input.addEventListener('focus', () => { if (!input.value) input.value = '+998 '; });
-  input.addEventListener('input', () => { input.value = formatPhone(input.value).text; });
-  input.addEventListener('blur', () => { if (formatPhone(input.value).digits.length === 0) input.value = ''; });
-});
-
 /* ---------- Forma yuborish ---------- */
 document.querySelectorAll('.js-lead-form').forEach((form) => {
   form.addEventListener('submit', async (e) => {
@@ -132,16 +98,13 @@ document.querySelectorAll('.js-lead-form').forEach((form) => {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(Object.assign({ type: 'lead' }, payload)),
         });
-        msg.classList.add('ok');
-        msg.textContent = "Rahmat! Arizangiz qabul qilindi. 1 ish kuni ichida siz bilan bog'lanamiz.";
-        form.reset();
-      } else {
-        msg.classList.add('ok');
-        msg.textContent = "Rahmat! Buyurtmani yakunlash uchun administratorga yozing…";
-        setTimeout(() => window.open(CONFIG.telegramAdmin, '_blank', 'noopener'), 700);
       }
+      msg.classList.add('ok');
+      msg.textContent = "Rahmat! To'lov sahifasiga o'tmoqdasiz…";
+      const q = new URLSearchParams({ name: payload.name, phone: payload.phone });
+      setTimeout(() => { location.href = CONFIG.paymentPage + '?' + q.toString(); }, 600);
     } catch (err) {
       msg.classList.add('err');
       msg.textContent = "Xatolik yuz berdi. Iltimos, Telegram orqali murojaat qiling.";

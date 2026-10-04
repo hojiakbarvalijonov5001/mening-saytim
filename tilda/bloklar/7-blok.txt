@@ -1,12 +1,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,600;1,700;1,800&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 <script>
-/* =========================================================
-   RASMLAR — Tilda'ga yuklangan rasmlar havolasi (tilda/build.py dagi TILDA_IMAGES)
-   ========================================================= */
-const IMAGES = {
-  kitob: 'https://optim.tildacdn.net/tild3763-3131-4039-a332-646662653965/-/resize/800x/-/format/webp/sherkchilik_new.png.webp',
-  muallif: 'https://optim.tildacdn.net/tild6537-6562-4661-b030-363466623236/-/resize/880x/-/format/webp/muallif.jpg.webp',
-};
+const IMAGES = {kitob: 'https://optim.tildacdn.net/tild3763-3131-4039-a332-646662653965/-/resize/800x/-/format/webp/sherkchilik_new.png.webp', muallif: 'https://optim.tildacdn.net/tild6537-6562-4661-b030-363466623236/-/resize/880x/-/format/webp/muallif.jpg.webp'};
 document.querySelectorAll('[data-img]').forEach((img) => {
   const url = IMAGES[img.dataset.img];
   if (url) img.src = url;
@@ -15,8 +9,37 @@ document.querySelectorAll('[data-img]').forEach((img) => {
 const CONFIG = {
 deadline: '2026-12-31T23:59:59+05:00',
 formEndpoint: '',
-telegramAdmin: 'https://t.me/biznesplanet_admin',
+telegramAdmin: 'https://t.me/insansupport',
+paymentPage: '/tolov',
+paymentMethods: {
+payme: { url: '', logo: '' },
+paynet: { url: '', logo: '' },
+click: { url: '', logo: '' },
+uzum: { url: '', logo: '' },
+alif: { url: '', logo: '' },
+},
 };
+function formatPhone(value) {
+let digits = value.replace(/\D/g, '');
+if (digits.startsWith('998')) digits = digits.slice(3);
+digits = digits.slice(0, 9);
+let out = '+998';
+if (digits.length) out += ' (' + digits.slice(0, 2);
+if (digits.length >= 2) out += ')';
+if (digits.length > 2) out += ' ' + digits.slice(2, 5);
+if (digits.length > 5) out += '-' + digits.slice(5, 7);
+if (digits.length > 7) out += '-' + digits.slice(7, 9);
+return { text: out, digits };
+}
+document.querySelectorAll('input[type="tel"]').forEach((input) => {
+input.addEventListener('focus', () => { if (!input.value) input.value = '+998 '; });
+input.addEventListener('input', () => { input.value = formatPhone(input.value).text; });
+input.addEventListener('blur', () => { if (formatPhone(input.value).digits.length === 0) input.value = ''; });
+});
+document.querySelectorAll('[data-admin-link]').forEach((a) => {
+a.href = CONFIG.telegramAdmin;
+if (a.hasAttribute('data-admin-text')) a.textContent = CONFIG.telegramAdmin.replace('https://', '');
+});
 (function countdown() {
 const end = new Date(CONFIG.deadline).getTime();
 const els = {};
@@ -73,23 +96,6 @@ document.querySelectorAll('[data-open-modal]').forEach((b) => b.addEventListener
 document.querySelectorAll('[data-close-modal]').forEach((b) => b.addEventListener('click', closeModal));
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 if (location.hash === '#popup:sherikchilik' || location.hash === '#buyurtma') openModal();
-function formatPhone(value) {
-let digits = value.replace(/\D/g, '');
-if (digits.startsWith('998')) digits = digits.slice(3);
-digits = digits.slice(0, 9);
-let out = '+998';
-if (digits.length) out += ' (' + digits.slice(0, 2);
-if (digits.length >= 2) out += ')';
-if (digits.length > 2) out += ' ' + digits.slice(2, 5);
-if (digits.length > 5) out += '-' + digits.slice(5, 7);
-if (digits.length > 7) out += '-' + digits.slice(7, 9);
-return { text: out, digits };
-}
-document.querySelectorAll('input[type="tel"]').forEach((input) => {
-input.addEventListener('focus', () => { if (!input.value) input.value = '+998 '; });
-input.addEventListener('input', () => { input.value = formatPhone(input.value).text; });
-input.addEventListener('blur', () => { if (formatPhone(input.value).digits.length === 0) input.value = ''; });
-});
 document.querySelectorAll('.js-lead-form').forEach((form) => {
 form.addEventListener('submit', async (e) => {
 e.preventDefault();
@@ -120,16 +126,13 @@ await fetch(CONFIG.formEndpoint, {
 method: 'POST',
 mode: 'no-cors',
 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-body: JSON.stringify(payload),
+body: JSON.stringify(Object.assign({ type: 'lead' }, payload)),
 });
-msg.classList.add('ok');
-msg.textContent = "Rahmat! Arizangiz qabul qilindi. 1 ish kuni ichida siz bilan bog'lanamiz.";
-form.reset();
-} else {
-msg.classList.add('ok');
-msg.textContent = "Rahmat! Buyurtmani yakunlash uchun administratorga yozing…";
-setTimeout(() => window.open(CONFIG.telegramAdmin, '_blank', 'noopener'), 700);
 }
+msg.classList.add('ok');
+msg.textContent = "Rahmat! To'lov sahifasiga o'tmoqdasiz…";
+const q = new URLSearchParams({ name: payload.name, phone: payload.phone });
+setTimeout(() => { location.href = CONFIG.paymentPage + '?' + q.toString(); }, 600);
 } catch (err) {
 msg.classList.add('err');
 msg.textContent = "Xatolik yuz berdi. Iltimos, Telegram orqali murojaat qiling.";
