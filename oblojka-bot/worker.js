@@ -30,12 +30,19 @@ export default {
 
     // Bir marta ochiladi: Telegramga botning manzilini aytadi.
     if (url.pathname === "/setup") {
-      const javob = await telegram(env, "setWebhook", {
+      const sozlama = {
         url: `${url.origin}/webhook`,
         secret_token: await maxfiyKalit(env.BOT_TOKEN),
         allowed_updates: ["message"],
         drop_pending_updates: true,
-      });
+      };
+      let javob = await telegram(env, "setWebhook", sozlama);
+      // Telegram yangi workers.dev manzilini ba'zan topa olmaydi ("Failed to resolve host").
+      // Shunda manzilning IP raqamini o'zimiz topib, Telegramga beramiz.
+      if (!javob.ok && /resolve/i.test(javob.description || "")) {
+        const ip = await ipTop(url.hostname);
+        if (ip) javob = await telegram(env, "setWebhook", { ...sozlama, ip_address: ip });
+      }
       const kv = env.XOTIRA ? "✅ XOTIRA ulangan" : "⚠️ XOTIRA (KV) ulanmagan — QOLLANMA.md 4-qadamni qarang";
       return new Response(
         (javob.ok ? "✅ Bot ishga tushdi! Telegramda botga /start yozing." : "❌ " + javob.description) + "\n" + kv,
@@ -130,6 +137,19 @@ async function telegram(env, metod, malumot) {
     body: JSON.stringify(malumot),
   });
   return res.json();
+}
+
+async function ipTop(host) {
+  try {
+    const res = await fetch(`https://cloudflare-dns.com/dns-query?name=${host}&type=A`, {
+      headers: { accept: "application/dns-json" },
+    });
+    const data = await res.json();
+    const a = (data.Answer || []).find((x) => x.type === 1);
+    return a ? a.data : null;
+  } catch {
+    return null;
+  }
 }
 
 // Webhook so'rovlari faqat Telegramdan kelishini tekshirish uchun tokendan kalit yasaladi.
