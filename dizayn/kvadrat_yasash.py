@@ -21,20 +21,21 @@ for line,size in [("BIZNESNI",210),("PROFESSIONAL",150),("YURITISH",210)]:
     y+=size
 img.alpha_composite(bgt)
 # spiker
-p=Image.open("spiker1.png").convert("RGBA").crop((0,430,1336,1800))
-s=0.68; p=p.resize((round(p.width*s),round(p.height*s)),Image.LANCZOS)
-img.alpha_composite(p,((S-p.width)//2,150))
+p=Image.open("spiker3c.png").convert("RGBA").crop((0,360,1125,1215))
+s=1.12; p=p.resize((round(p.width*s),round(p.height*s)),Image.LANCZOS)
+cx=round(555*s)                       # spiker markazi (asl rasmda x~555)
+img.alpha_composite(p,(S//2-cx,S-p.height))
 # pastki qorong'ilashtirish (sarlavha o'qilishi uchun)
 sh=Image.new("RGBA",(S,S),(0,0,0,0)); sd=ImageDraw.Draw(sh)
-for yy in range(620,S):
-    t=(yy-620)/(S-620); sd.line([(0,yy),(S,yy)],fill=(10,16,36,round(245*min(1,t*1.4))))
+for yy in range(800,S):
+    t=(yy-800)/(S-800); sd.line([(0,yy),(S,yy)],fill=(10,16,36,round(245*min(1,t*1.4))))
 img.alpha_composite(sh)
 d=ImageDraw.Draw(img)
 # sarlavha: "TIZIM VA" oq, "SOTUV" ko'k plashka ichida
-f=ImageFont.truetype(F900,132)
-t1="TIZIM VA"; w1=d.textlength(t1,font=f); d.text(((S-w1)/2,735),t1,font=f,fill="white")
+f=ImageFont.truetype(F900,124)
+t1="TIZIM VA"; w1=d.textlength(t1,font=f); d.text(((S-w1)/2,775),t1,font=f,fill="white")
 t2="SOTUV"; w2=d.textlength(t2,font=f)
-bx0,by0=(S-w2)/2-40,880; bx1,by1=(S+w2)/2+40,880+150
+bx0,by0=(S-w2)/2-36,912; bx1,by1=(S+w2)/2+36,912+142
 d.polygon([(bx0+22,by0),(bx1+22,by0),(bx1-22,by1),(bx0-22,by1)],fill=(47,107,255))
 d.text(((S-w2)/2,by0+2),t2,font=f,fill="white")
 img.convert("RGB").save("/home/user/mening-saytim/dizayn/tizim-va-sotuv-1x1.png")
