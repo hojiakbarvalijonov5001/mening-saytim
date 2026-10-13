@@ -57,19 +57,41 @@ im.alpha_composite(sp.filter(ImageFilter.GaussianBlur(60)))
 sp=Image.new("RGBA",(W,H),(0,0,0,0)); s=ImageDraw.Draw(sp)
 s.ellipse((CX-spot_rx,spot_cy-spot_ry,CX+spot_rx,spot_cy+spot_ry),fill=(250,200,100,235))
 im.alpha_composite(sp.filter(ImageFilter.GaussianBlur(22)))
-# --- nur konusi: likopchadan dog'gacha, markazda ---
+# --- tortish nuri: likopchadan dog'gacha, ichida yuqoriga oqayotgan yorug'lik ---
+TOP_Y=385*S; TOP_W=150
 cone=Image.new("RGBA",(W,H),(0,0,0,0)); c=ImageDraw.Draw(cone)
-c.polygon([(CX-110,385*S),(CX+110,385*S),(CX+spot_rx*0.85,spot_cy),(CX-spot_rx*0.85,spot_cy)],fill=(255,205,140,70))
-im.alpha_composite(cone.filter(ImageFilter.GaussianBlur(60)))
+c.polygon([(CX-TOP_W,TOP_Y),(CX+TOP_W,TOP_Y),(CX+spot_rx*0.9,spot_cy),(CX-spot_rx*0.9,spot_cy)],fill=(255,205,140,85))
+im.alpha_composite(cone.filter(ImageFilter.GaussianBlur(45)))
+core=Image.new("RGBA",(W,H),(0,0,0,0)); c=ImageDraw.Draw(core)
+c.polygon([(CX-TOP_W*0.55,TOP_Y),(CX+TOP_W*0.55,TOP_Y),(CX+spot_rx*0.45,spot_cy),(CX-spot_rx*0.45,spot_cy)],fill=(255,225,170,60))
+im.alpha_composite(core.filter(ImageFilter.GaussianBlur(35)))
+rng=np.random.default_rng(7)
+streak=Image.new("RGBA",(W,H),(0,0,0,0)); sd=ImageDraw.Draw(streak)
+for _ in range(70):                       # nur ichidagi yuqoriga oqayotgan ingichka chiziqlar
+    u=rng.uniform(-1,1); y_a=rng.uniform(TOP_Y,spot_cy-80); ln=rng.uniform(90,320)
+    def xat(y): k=(y-TOP_Y)/(spot_cy-TOP_Y); return CX+u*(TOP_W+(spot_rx*0.85-TOP_W)*k)
+    y_b=min(spot_cy,y_a+ln)
+    for j in range(12):
+        y=y_a+(y_b-y_a)*j/12; y2=y_a+(y_b-y_a)*(j+1)/12
+        al=int(70*(1-j/12)*rng.uniform(0.5,1))
+        sd.line([(xat(y),y),(xat(y2),y2)],fill=(255,230,180,al),width=int(rng.integers(2,5)))
+im.alpha_composite(streak.filter(ImageFilter.GaussianBlur(2)))
+dust=Image.new("RGBA",(W,H),(0,0,0,0)); dd=ImageDraw.Draw(dust)
+for _ in range(160):                      # nurda ko'tarilayotgan chang zarralari
+    y=rng.uniform(TOP_Y,spot_cy); k=(y-TOP_Y)/(spot_cy-TOP_Y)
+    x=CX+rng.uniform(-1,1)*(TOP_W+(spot_rx*0.85-TOP_W)*k); r=rng.uniform(2,6)
+    dd.ellipse((x-r,y-r,x+r,y+r),fill=(255,236,200,int(rng.uniform(60,200))))
+im.alpha_composite(dust.filter(ImageFilter.GaussianBlur(1.2)))
 # --- og'riqlar plashkalari ---
 pains=sys.argv[2].split("|"); n=len(pains)
 cols=[((24,22,26),"w"),((30,42,64),"w"),((236,214,172),"d"),((214,92,44),"w"),((168,34,30),"w"),((28,36,56),"w"),((24,22,26),"w"),((200,72,40),"w")]
-angs=[-7,6,-9,8,-5,-8,7,-4]
+angs=[-16,12,-13,10,-8,-9,6,-3]
 y0=405*S; y1=spot_cy-40
 for i,p in enumerate(pains):
-    sc=0.74+0.18*i/(n-1)
+    sc=0.60+0.36*(i/(n-1))**1.1
     cy=y0+(y1-y0)*i/(n-1)
-    cx=CX+(46 if i%2==0 else -46)*S
+    amp=(20+32*i/(n-1))*S
+    cx=CX+(amp if i%2==0 else -amp)
     tw,th=int(114*S*sc),int(37*S*sc)
     col,tc=cols[i%len(cols)]
     words=p.upper().split(); fsz=int(36*sc)
@@ -89,6 +111,18 @@ for i,p in enumerate(pains):
     sh=Image.new("RGBA",tile.size,(0,0,0,0)); sh.putalpha(tile.getchannel("A").point(lambda v:v*0.55))
     sh=sh.filter(ImageFilter.GaussianBlur(14))
     x=int(cx-tile.width/2); y=int(cy-tile.height/2)
-    im.alpha_composite(sh,(x+10,y+18)); im.alpha_composite(tile,(x,y))
+    # yuqoriga tortilayotgandek harakat izi (plashka ostida xiralashgan nusxalar)
+    trail=Image.new("RGBA",tile.size,(0,0,0,0))
+    ghost=Image.new("RGBA",tile.size,col+(0,)); ghost.putalpha(tile.getchannel("A"))   # yozuvsiz, faqat rang
+    ghost=ghost.filter(ImageFilter.GaussianBlur(6))
+    steps=7; gap=int(10+18*(1-i/(n-1)))
+    big=Image.new("RGBA",(tile.width,tile.height+steps*gap),(0,0,0,0))
+    for k in range(steps,0,-1):
+        g=ghost.copy(); g.putalpha(g.getchannel("A").point(lambda v,k=k:int(v*0.22*(1-k/(steps+1)))))
+        big.alpha_composite(g,(0,k*gap))
+    im.alpha_composite(sh,(x+10,y+18)); im.alpha_composite(big,(x,y))
+    if i<3:                                # eng tepadagilar nurda yorishib, biroz shaffof
+        tile.putalpha(tile.getchannel("A").point(lambda v:int(v*(0.82+0.06*i))))
+    im.alpha_composite(tile,(x,y))
 print("margin top",margin,"bottom",H-spot_bottom)
 im.convert("RGB").save(sys.argv[3],quality=95)
