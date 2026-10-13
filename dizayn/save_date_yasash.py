@@ -80,10 +80,19 @@ ctext(CC,440*S,"OKTABR",F(700,92),(255,255,255,255),dr=g)
 ctext(CC,482*S,"2026",F(400,40),(255,225,225,255),sp=34,dr=g)
 sh=Image.new("RGBA",(W,H),(90,0,0,0)); sh.putalpha(glow.getchannel("A").filter(ImageFilter.GaussianBlur(10)).point(lambda v:v*0.6))
 im.alpha_composite(sh); im.alpha_composite(glow)
+# --- hammasini vertikal markazga surish: kartani tepaga ko'tarib, pastki fonni cho'zish ---
+CARD_TOP,CARD_BOT,PILL_H,GAP=183*S,588*S,36*S,58*S
+block=(CARD_BOT-CARD_TOP)+GAP+PILL_H
+new_top=(H-block)//2; D=CARD_TOP-new_top
+arr=np.asarray(im)
+cut=CARD_BOT+6*S
+top_part=Image.fromarray(arr[D:cut]); bot=Image.fromarray(arr[cut:]).resize((W,H-(cut-D)),Image.BICUBIC).filter(ImageFilter.GaussianBlur(10))
+im=Image.new("RGBA",(W,H)); im.paste(top_part,(0,0)); im.paste(bot,(0,cut-D))
 # pastdagi chaqiriq
 d=ImageDraw.Draw(im)
 t="Hoziroq biznes forumga ro’yxatdan o’ting!"; f=F(600,50)
-w=d.textlength(t,font=f); bx0,bx1=W/2-w/2-50,W/2+w/2+50; by0,by1=646*S,(646+36)*S
+w=d.textlength(t,font=f); bx0,bx1=W/2-w/2-50,W/2+w/2+50; by0=CARD_BOT-D+GAP; by1=by0+PILL_H
 d.rounded_rectangle((bx0,by0,bx1,by1),radius=(by1-by0)//2,outline=(255,255,255),width=4)
-ctext(W/2,by0+(by1-by0)/2-36,t,f,(255,255,255))
+ctext(W/2,by0+(by1-by0)/2-36,t,f,(255,255,255),dr=d)
+print("tepa",new_top,"past",H-by1)
 im.convert("RGB").save("/home/user/mening-saytim/dizayn/forum-save-date.jpg",quality=95)
