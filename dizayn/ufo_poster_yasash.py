@@ -36,7 +36,8 @@ lh=size*1.28
 asc=d.textbbox((0,0),"B",font=f)       # bosh harf balandligi
 cap_top,cap_bot=asc[1],asc[3]
 block_h=(len(lines)-1)*lh+(cap_bot-cap_top)
-head_bottom=SAUCER_TOP-150                # likopchadan ko'proq masofa
+BADGE_H=84; BADGE_GAP=52
+head_bottom=SAUCER_TOP-70-BADGE_H-BADGE_GAP   # sarlavha + joylashuv plashkasi likopchadan yuqorida
 head_top=head_bottom-block_h
 txt=Image.new("RGBA",(W,H),(0,0,0,0)); td=ImageDraw.Draw(txt)
 y=head_top-cap_top
@@ -48,6 +49,25 @@ for yy in range(H):
 glow=Image.new("RGBA",(W,H),(255,190,140,0)); glow.putalpha(txt.getchannel("A").filter(ImageFilter.GaussianBlur(12)).point(lambda v:v*0.35))
 im.alpha_composite(glow); im.paste(grad,(0,0),txt.getchannel("A"))
 margin=head_top                            # tepadagi bo'shliq
+# --- joylashuv plashkasi: "QO'QON SHAHRI" ---
+city=sys.argv[4] if len(sys.argv)>4 else "QO’QON SHAHRI"
+fb=ImageFont.truetype(FD+"montserrat-latin-700-normal.woff",44); sp_=7
+bd=ImageDraw.Draw(im)
+tw_=sum(bd.textlength(ch,font=fb) for ch in city)+sp_*(len(city)-1)
+pin_w=34; inner=pin_w+22+tw_
+bx0=CX-inner/2-48; bx1=CX+inner/2+48; by0=head_bottom+BADGE_GAP; by1=by0+BADGE_H
+badge=Image.new("RGBA",(W,H),(0,0,0,0)); b=ImageDraw.Draw(badge)
+b.rounded_rectangle((bx0,by0,bx1,by1),radius=BADGE_H//2,fill=(20,14,18,110),outline=(255,206,170,230),width=3)
+# joylashuv belgisi
+px0=bx0+48; pcy=(by0+by1)/2-6; r=17
+b.ellipse((px0,pcy-r,px0+2*r,pcy+r),fill=(255,206,170,255))
+b.polygon([(px0+3,pcy+7),(px0+2*r-3,pcy+7),(px0+r,pcy+r+20)],fill=(255,206,170,255))
+b.ellipse((px0+r-7,pcy-7,px0+r+7,pcy+7),fill=(40,28,32,255))
+x=px0+pin_w+22; ty=(by0+by1)/2-b.textbbox((0,0),"Q",font=fb)[3]/2-2
+for ch in city:
+    b.text((x,ty),ch,font=fb,fill=(255,222,196,255)); x+=b.textlength(ch,font=fb)+sp_
+g2=Image.new("RGBA",(W,H),(255,190,140,0)); g2.putalpha(badge.getchannel("A").filter(ImageFilter.GaussianBlur(14)).point(lambda v:v*0.25))
+im.alpha_composite(g2); im.alpha_composite(badge)
 # --- markazdagi yorug'lik dog'i (pastdagi bo'shliq tepadagiga teng) ---
 spot_ry=95; spot_rx=430
 spot_bottom=H-margin; spot_cy=spot_bottom-spot_ry
